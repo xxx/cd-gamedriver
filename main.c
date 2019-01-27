@@ -2,6 +2,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <limits.h>
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -345,7 +346,7 @@ debug_message(char *fmt, ...)
     char *f;
 
     static FILE *fp = NULL;
-    char deb[100];
+    char deb[PATH_MAX];
     char name[100];
 
     if (fp == NULL) {

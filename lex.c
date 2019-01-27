@@ -359,7 +359,7 @@ static INLINE FILE *
 inc_try(char *buf)
 {
     struct incstate *inc;
-    char errbuf[1024];
+    char errbuf[BUFSIZ];
     char *new_name;
     FILE *f;
 
