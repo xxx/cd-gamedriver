@@ -2052,6 +2052,12 @@ string_constant: string_con1
         };
 
 string_con1: F_STRING
+	   | string_con1 F_STRING
+	{
+	    $$ = tmpalloc( strlen($1) + strlen($2) + 1 );
+	    (void)strcpy($$, $1);
+	    (void)strcat($$, $2);
+        }
 	   | string_con1 '+' F_STRING
 	{
 	    $$ = tmpalloc( strlen($1) + strlen($3) + 1 );

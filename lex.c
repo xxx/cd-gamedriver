@@ -1318,6 +1318,25 @@ yylex(void)
 	{
 	    keep1.line = current_line;
 	    keep1.lval = yylval;
+	    /*
+	     * changed to allow ansi C string constant contatenation
+	     * "abc" "def" = "abcdef" in addition to standard behaviour
+	     * "abc" + "def" = "abcdef". - 20040108 .TM.
+	     */
+	    if (r == F_STRING) {
+		/*
+		 * 1:string 2:string
+		 *  concatenate and loop again, reading next token
+		 */
+		keep2.lval.string = tmpalloc(strlen(keep4.lval.string) +
+					 strlen(keep1.lval.string) + 1);
+		(void)strcpy(keep2.lval.string, keep4.lval.string);
+		(void)strcat(keep2.lval.string, keep1.lval.string);
+		keep4.line = keep1.line;
+		keep4.lval.string = keep2.lval.string;
+		r = yylex1();
+		continue;
+	    }
 	    if (r != '+')
 	    {
 		/*
