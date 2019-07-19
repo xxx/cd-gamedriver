@@ -1157,7 +1157,7 @@ int curtracedepth[TRACE_SIZE];
 static unsigned int last;
 #endif
 /*static int num_arg; */
-extern char *string_print_formatted (int , char *, int, struct svalue *);
+extern char *string_print_formatted (int, char *, int, struct svalue *);
 extern char *break_string (char *, int, struct svalue *);
 extern struct mapping *copy_mapping(struct mapping *);
 extern char *query_ip_number (struct object *);
@@ -1167,7 +1167,6 @@ extern struct vector *get_local_commands (struct object *);
 extern struct vector *subtract_array (struct vector *,struct vector*);
 extern struct vector *intersect_array (struct vector *, struct vector *);
 extern struct vector *union_array (struct vector *, struct vector *);
-extern char *string_print_formatted (int, char *, int, struct svalue *);
 extern struct svalue *debug_command (char *, int, struct svalue *);
 extern struct vector *subtract_array (struct vector*,struct vector*);
 extern struct vector *intersect_array (struct vector*,struct vector*);
