@@ -7,3 +7,7 @@ SYNOPSIS
 DESCRIPTION
 	Gives the length of a string in number of characters. If an integer
 	is passed as an argument then 0 is returned.
+
+	When ANSI_COLOR is defined, this will give the true length of a string,
+	including non-printable characters. Use strlen_printable() if you do
+	not want escape sequence characters included.

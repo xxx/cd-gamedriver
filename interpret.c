@@ -5720,7 +5720,22 @@ f_strlen(int xxx)
     if (sp->type == T_NUMBER)
 	i = 0;
     else
+        i = strlen(sp->u.string);
+
+    pop_stack();
+    push_number(i);
+}
+
 #ifdef ANSI_COLOR
+/* ARGSUSED */
+static void
+f_strlen_printable(int xxx)
+{
+    int i;
+
+    if (sp->type == T_NUMBER)
+	i = 0;
+    else
     {
         char *chr = sp->u.string;
         int ansi_len = 0;
@@ -5752,12 +5767,11 @@ f_strlen(int xxx)
             chr++;
         }
     }
-#else
-        i = strlen(sp->u.string);
-#endif
+
     pop_stack();
     push_number(i);
 }
+#endif
 
 /* ARGSUSED */
 static void

@@ -1,0 +1,13 @@
+NAME
+	strlen_printable - give the length of a string, sans ANSI color
+
+SYNOPSIS
+	int strlen_printable(int|string str)
+
+DESCRIPTION
+	Gives the length of a string in number of characters, minus the length
+	of any complete ANSI color sequences. If an integer is passed as an
+	argument then 0 is returned.
+
+	This function is not defined unless ANSI_COLOR is defined.
+

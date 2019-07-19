@@ -10,8 +10,8 @@ void
 test_strlen()
 {
     // 0: input
-    // 1: expected output with ANSI_COLOR defined
-    // 2: expected output without ANSI_COLOR defined
+    // 1: expected output of strlen_printable
+    // 2: expected output of strlen
     mixed *strings = ({
         ({"just a string\n", 14, 14 }),
         ({ sprintf(
@@ -27,9 +27,11 @@ test_strlen()
 
     foreach(string *triplet: strings)
     {
-        write("strlen() of [" + triplet[0] + "] is " + strlen(triplet[0]) + ". " +
-              "When ANSI_COLOR is defined, we expect " + triplet[1] + ". " +
-              "When not defined, we expect " + triplet[2] + ".\n");
+        write("strlen_printable() of [" + triplet[0] + "] is " +
+        strlen_printable(triplet[0]) +
+        ". We expect " + triplet[1] + ".\n");
+        write("strlen() of [" + triplet[0] + "] is " + strlen(triplet[0]) +
+        ". We expect " + triplet[2] + ".\n");
     }
 }
 

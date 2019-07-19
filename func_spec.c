@@ -149,6 +149,9 @@ float	sqrt(float);
 mixed   str2val(string);
 int	stringp(mixed);
 int	strlen(int|string);
+#ifdef ANSI_COLOR
+int	strlen_printable(int|string);
+#endif
 void	tail(string);
 float	tan(float);
 float	tanh(float);

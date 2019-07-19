@@ -357,7 +357,9 @@
  *
  * When defined, ANSI color sequences are ignored when
  * calculating the length of strings for display
- * (i.e. strlen & break_string efuns, and write_socket()).
+ * (i.e. break_string & sprintf efuns, and write_socket()).
+ * It also defines a second strlen efun, to give the length
+ * of strings without including the color sequences.
  * This functionality only handles ANSI SGR sequences.
  * Further color support is to be handled by the mudlib.
  */
