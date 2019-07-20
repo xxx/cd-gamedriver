@@ -66,6 +66,10 @@
 
 #include "inline_svalue.h"
 
+#ifdef ANSI_COLOR
+#include "ansi_color.h"
+#endif
+
 /*
  * If this #define is defined then error messages are returned,
  * otherwise error() is called (ie: A "wrongness in the fabric...")
@@ -422,12 +426,19 @@ add_justified(char *str, char *pad, unsigned int fs, format_info finfo, short tr
     int i;
     
     len = strlen(str);
+#ifdef ANSI_COLOR
+    size_t plen = strlen_printable(str);
+#endif
     switch(finfo & INFO_J)
     {
     case INFO_J_LEFT:
 	for (i = 0; i < len; i++)
 	    ADD_CHAR(str[i]);
-	fs -= len;
+#ifdef ANSI_COLOR
+        fs -= plen;
+#else
+        fs -= len;
+#endif
 	len = strlen(pad);
 	if (trailing)
 	    for (i = 0; fs > 0; i++, fs--)
@@ -442,7 +453,11 @@ add_justified(char *str, char *pad, unsigned int fs, format_info finfo, short tr
 	int j, l;
 	
 	l = strlen(pad);
+#ifdef ANSI_COLOR
+        j = (fs - plen) / 2 + (fs - plen) % 2;
+#else
 	j = (fs - len) / 2 + (fs - len) % 2;
+#endif
 	for (i = 0; i < j; i++)
 	{
 	    if (l && pad[i % l] == '\\')
@@ -454,7 +469,11 @@ add_justified(char *str, char *pad, unsigned int fs, format_info finfo, short tr
 	}
 	for (i = 0; i < len; i++)
 	    ADD_CHAR(str[i]);
-	j = (fs - len) / 2;
+#ifdef ANSI_COLOR
+        j = (fs - plen) / 2;
+#else
+        j = (fs - len) / 2;
+#endif
 	if (trailing)
 	    for (i = 0; i < j; i++)
 	    {
@@ -469,9 +488,14 @@ add_justified(char *str, char *pad, unsigned int fs, format_info finfo, short tr
     }
     default: { /* std (s)printf defaults to right justification */
 	int l;
-	
-        if (fs > len) 
+
+#ifdef ANSI_COLOR
+        if (fs > plen)
+            fs -= plen;
+#else
+        if (fs > len)
             fs -= len;
+#endif
         else
             fs = 0;
 
@@ -1082,7 +1106,12 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 			    input_copy[prec] = '\0';
 			    slen = prec;
 			}
-			if (fs && fs > slen) {
+#ifdef ANSI_COLOR
+			size_t plen = strlen_printable(carg->u.string);
+			if (fs && fs > plen) {
+#else
+                        if (fs && fs > slen) {
+#endif
                             add_justified(input_copy, pad, fs, finfo,
                                           (
                                            ((format_str[fpos] != '\n') && (format_str[fpos] != '\0'))
