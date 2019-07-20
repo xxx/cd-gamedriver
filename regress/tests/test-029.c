@@ -95,9 +95,37 @@ test_break_string()
     }
 }
 
+void test_sprintf()
+{
+    string str = "the quick brown fox jumped over the lazy dog";
+    string colored = sprintf("%c[31m" + str + "%c[0m", ESC, ESC);
+
+    write(
+        sprintf(
+            "%8s %8s\n",
+            "xxx",
+            "yyy"
+        )
+    );
+    write(
+        sprintf(
+            "%8s %8s\n",
+            sprintf("%c[31mxxx%c[0m", ESC, ESC),
+            sprintf("%c[38;5;208myyy%c[0m", ESC, ESC)
+        )
+    );
+
+    write(sprintf("%=10s\n", str));
+    write(sprintf("%=10s\n", colored));
+
+    write(sprintf("%#60s\n", implode(explode(str, " "), "\n")));
+    write(sprintf("%#60s\n", implode(explode(colored, " "), "\n")));
+}
+
 void
 create()
 {
     test_strlen();
     test_break_string();
+    test_sprintf();
 }
