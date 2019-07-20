@@ -148,8 +148,8 @@ void test_sprintf()
     write(sprintf("%=10s %5s\n", str, "tacos"));
     write(sprintf("%=10s %5s\n", colored, "tacos"));
 
-    write(sprintf("%#60s\n", implode(explode(str, " "), "\n")));
-    write(sprintf("%#60s\n", implode(explode(colored, " "), "\n")));
+    write(sprintf("%#60.4s\n", implode(explode(str, " "), "\n")));
+    write(sprintf("%#60.4s\n", implode(explode(colored, " "), "\n")));
 }
 
 void
