@@ -815,7 +815,7 @@ push_mstring(char *p)
     sp->u.string = p;
 }
 
-extern char *string_print_formatted (int , char *, int, struct svalue *);
+extern char *string_print_formatted (int, char *, int, struct svalue *);
 
 #ifdef TRACE_CODE
 static void 
@@ -1157,7 +1157,6 @@ int curtracedepth[TRACE_SIZE];
 static unsigned int last;
 #endif
 /*static int num_arg; */
-extern char *string_print_formatted (int, char *, int, struct svalue *);
 extern char *break_string (char *, int, struct svalue *);
 extern struct mapping *copy_mapping(struct mapping *);
 extern char *query_ip_number (struct object *);
