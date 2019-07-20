@@ -363,7 +363,7 @@
  * This functionality only handles ANSI SGR sequences.
  * Further color support is to be handled by the mudlib.
  */
-#undef ANSI_COLOR
+#define ANSI_COLOR
 
 #endif
 

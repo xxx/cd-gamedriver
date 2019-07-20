@@ -39,6 +39,10 @@
 
 #include "efun_table.h"
 
+#ifdef ANSI_COLOR
+#include "ansi_color.h"
+#endif
+
 #define FLOATASGOP(lhs, op, rhs) { lhs op (double)rhs; }
 
 
@@ -48,7 +52,6 @@ struct fkntab
     unsigned short inherit_index;
     unsigned short function_index;
 };
-
 
 extern char *crypt(const char *key, const char *salt);
 extern struct object *master_ob;
@@ -5734,37 +5737,7 @@ f_strlen_printable(int xxx)
     if (sp->type == T_NUMBER)
 	i = 0;
     else
-    {
-        char *chr = sp->u.string;
-        int ansi_len = 0;
-        i = 0;
-
-        while (*chr)
-        {
-            i++;
-
-            if (ansi_len > 0)
-            {
-                /* end of sequence */
-                if ((*chr) == ANSI_END)
-                {
-                    /* subtract the length of just-finished sequence */
-                    i -= ansi_len + 1;
-                    ansi_len = 0;
-                }
-                else
-                {
-                    ansi_len++;
-                }
-            }
-            else if ((*chr) == ANSI_START)
-            {
-                ansi_len++;
-            }
-
-            chr++;
-        }
-    }
+        i = strlen_printable(sp->u.string);
 
     pop_stack();
     push_number(i);

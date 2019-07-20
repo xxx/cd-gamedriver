@@ -28,6 +28,10 @@
 
 #include "inline_svalue.h"
 
+#ifdef ANSI_COLOR
+#include "ansi_color.h"
+#endif
+
 extern int d_flag; /* for debugging purposes */
 extern struct object *previous_ob;
 struct object *vbfc_object;

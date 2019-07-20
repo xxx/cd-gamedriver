@@ -36,6 +36,9 @@
 #include "json.h"
 #include "inline_svalue.h"
 #include "comm1.h"
+#ifdef ANSI_COLOR
+#include "ansi_color.h"
+#endif
 
 void set_prompt (char *);
 void prepare_ipc (void);
