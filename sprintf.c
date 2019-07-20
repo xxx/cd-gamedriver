@@ -526,13 +526,39 @@ add_column(cst **column, short int trailing)
 {
     register unsigned int done;
     unsigned int save;
+#ifdef ANSI_COLOR
+    int in_ansi = 0;
+    int ansi_len = 0;
+#endif
     
+#ifdef ANSI_COLOR
+    for (done = 0;
+         ((done - ansi_len) < (*column)->prec) &&
+         ((*column)->d.col)[done] &&
+         (((*column)->d.col)[done] != '\n');
+         done++)
+    {
+        if (in_ansi)
+        {
+            if (((*column)->d.col)[done] == ANSI_END)
+                in_ansi = 0;
+
+            ansi_len++; // We skip sequence characters.
+        }
+        else if (((*column)->d.col)[done] == ANSI_START)
+        {
+            in_ansi = 1;
+            ansi_len++;
+        }
+    }
+#else
     for (done = 0;
 	 (done < (*column)->prec) &&
 	 ((*column)->d.col)[done] &&
 	 (((*column)->d.col)[done] != '\n');
 	 done++)
-	;
+    ;
+#endif
     if (((*column)->d.col)[done] && (((*column)->d.col)[done] != '\n'))
     {
 	save = done;
