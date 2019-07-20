@@ -1064,6 +1064,9 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 			    (*temp)->next = 0;
 			    max = len = 0;
 			    n = 1;
+#ifdef ANSI_COLOR
+			    int in_ansi = 0;
+#endif
 			    for (i = 0; input_copy[i]; i++)
 			    {
 				if (input_copy[i] == '\n')
@@ -1075,7 +1078,16 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 					n++;
 				    continue;
 				}
+#ifdef ANSI_COLOR
+				if (in_ansi && input_copy[i] == ANSI_END)
+                                    in_ansi = 0;
+				else if (input_copy[i] == ANSI_START)
+				    in_ansi = 1;
+				else
+				    len++;
+#else
 				len++;
+#endif
 			    }
 			    if (prec)
 			    {

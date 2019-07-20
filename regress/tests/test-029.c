@@ -115,8 +115,38 @@ void test_sprintf()
         )
     );
 
-    write(sprintf("%=10s\n", str));
-    write(sprintf("%=10s\n", colored));
+    write(
+        sprintf(
+            "%-8s %-8s\n",
+            "xxx",
+            "yyy"
+        )
+    );
+    write(
+        sprintf(
+            "%-8s %-8s\n",
+            sprintf("%c[31mxxx%c[0m", ESC, ESC),
+            sprintf("%c[38;5;208myyy%c[0m", ESC, ESC)
+        )
+    );
+
+    write(
+        sprintf(
+            "%|8sx%|8s\n",
+            "xxx",
+            "yyy"
+        )
+    );
+    write(
+        sprintf(
+            "%|8sx%|8s\n",
+            sprintf("%c[31mxxx%c[0m", ESC, ESC),
+            sprintf("%c[38;5;208myyy%c[0m", ESC, ESC)
+        )
+    );
+
+    write(sprintf("%=10s %5s\n", str, "tacos"));
+    write(sprintf("%=10s %5s\n", colored, "tacos"));
 
     write(sprintf("%#60s\n", implode(explode(str, " "), "\n")));
     write(sprintf("%#60s\n", implode(explode(colored, " "), "\n")));
