@@ -2,6 +2,10 @@
 
 #define ESC 27
 
+#define RED(txt) sprintf("%c[31m%s%c[0m", ESC, txt, ESC)
+#define ORANGE(txt) sprintf("%c[38;5;208m%s%c[0m", ESC, txt, ESC)
+#define BLUE(txt) sprintf("%c[12m%s%c[0m", ESC, txt, ESC)
+
 /*
  * Some tests around the #define of ANSI_COLOR
  */
@@ -150,6 +154,40 @@ void test_sprintf()
 
     write(sprintf("%#60.4s\n", implode(explode(str, " "), "\n")));
     write(sprintf("%#60.4s\n", implode(explode(colored, " "), "\n")));
+
+    string red = RED("red");
+    string orange = ORANGE("orange");
+    string blue = BLUE("blue");
+    string *colors = ({
+        red, orange, blue,
+        red, orange, blue,
+        red, orange, blue,
+        red, orange, blue,
+        red, orange, blue,
+        red, orange, blue,
+    });
+
+    string s = implode(colors, " ");
+    write(sprintf("%=10s %=10s %=10s\n", s, s, s));
+
+    write(sprintf("%=10s %=10s %=10s\n", RED("taccos"), ORANGE(
+        "Hello my nice friends. How are you today? I am writing " +
+        "a bunch to try to make this display the bad column sizing " +
+        "with colors"), BLUE(
+        "Hello my nice friends. How are you today? I am writing " +
+        "a bunch to try to make this display the bad column sizing " +
+        "with colors")
+        )
+    );
+    write(sprintf("%=10s %=10s %=10s\n", "taccos",
+        "Hello my nice friends. How are you today? I am writing " +
+        "a bunch to try to make this display the bad column sizing " +
+        "with colors",
+        "Hello my nice friends. How are you today? I am writing " +
+        "a bunch to try to make this display the bad column sizing " +
+        "with colors"
+        )
+    );
 }
 
 void

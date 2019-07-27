@@ -156,11 +156,26 @@ typedef unsigned int format_info;
 #define ERR_NULL_PS		0xC	/* pad string is null */
 #define ERR_BAD_FLOAT_TYPE      0xD     /* Bad float type... */
 
+#ifdef ANSI_COLOR
+#define ADD_CHAR(x) {\
+  buff[bpos++] = x;\
+  if (bpos > BUFF_SIZE) ERROR(ERR_BUFF_OVERFLOW); \
+  curpos++;\
+  if (in_add_char_ansi) {\
+    if ((x) == ANSI_END) in_add_char_ansi = 0;\
+    add_char_ansi_len++;\
+  } else if ((x) == ANSI_START) {\
+    in_add_char_ansi = 1;\
+    add_char_ansi_len++;\
+  }\
+}
+#else
 #define ADD_CHAR(x) {\
   buff[bpos++] = x;\
   if (bpos > BUFF_SIZE) ERROR(ERR_BUFF_OVERFLOW); \
   curpos++;\
 }
+#endif
 
 #define GET_NEXT_ARG {\
   if (++arg >= argc) ERROR(ERR_TO_FEW_ARGS); \
@@ -210,6 +225,13 @@ static struct svalue *clean;	/* Temporary storage */
 static savechars *saves;	/* chars to restore */
 static int call_master_ob;	/* should the master object be called for the
 				 * name of an object? */
+
+#ifdef ANSI_COLOR
+static unsigned int in_add_char_ansi;  /* Track if we're in an ansi sequence or
+                                        * not, during ADD_CHARs */
+static unsigned int add_char_ansi_len; /* current length of unprintables */
+#endif
+
 /*
  * Probably should make this a #define...
  */
@@ -794,6 +816,10 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
     arg = (unsigned)-1;
     bpos = 0;
     curpos = 0;
+#ifdef ANSI_COLOR
+    add_char_ansi_len = 0;
+    in_add_char_ansi = 0;
+#endif
     csts = 0;
     for (fpos = 0 ;; fpos++)
     {
@@ -807,11 +833,17 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 		    break;
 		ADD_CHAR('\n');
 		curpos = 0;
+#ifdef ANSI_COLOR
+		add_char_ansi_len = 0;
+#endif
 		continue;
 	    }
 	    ADD_CHAR('\n');
 	    curpos = 0;
-	    while (csts)
+#ifdef ANSI_COLOR
+            add_char_ansi_len = 0;
+#endif
+            while (csts)
 	    {
 		cst **temp;
 		
@@ -840,7 +872,10 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 		if (csts || format_str[fpos] == '\n')
 		    ADD_CHAR('\n');
 		curpos = 0;
-	    } /* of while (csts) */
+#ifdef ANSI_COLOR
+                add_char_ansi_len = 0;
+#endif
+            } /* of while (csts) */
 	    if (column_stat == 2)
 		ADD_CHAR('\n');
 	    if (!format_str[fpos])
@@ -1045,8 +1080,12 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 			    (*temp)->size = fs;
 			    (*temp)->prec = (prec) ? prec : fs;
 			    (*temp)->info = finfo;
-			    (*temp)->start = curpos;
-                            if ((add_column(temp, (((format_str[fpos] != '\n') && (format_str[fpos] != '\0')) 
+#ifdef ANSI_COLOR
+                            (*temp)->start = curpos - add_char_ansi_len;
+#else
+                            (*temp)->start = curpos;
+#endif
+                            if ((add_column(temp, (((format_str[fpos] != '\n') && (format_str[fpos] != '\0'))
                                                    || ((finfo & INFO_ARRAY) && (nelemno < (argv+arg)->u.vec->size)))) == 2)
                                 && !format_str[fpos])
 			    {
