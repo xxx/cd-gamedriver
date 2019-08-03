@@ -170,19 +170,24 @@ void test_sprintf()
     string s = implode(colors, " ");
     write(sprintf("%=10s %=10s %=10s\n", s, s, s));
 
-    write(sprintf("%=10s %=10s %=10s\n", RED("taccos"), ORANGE(
-        "Hello my nice friends. How are you today? I am writing " +
-        "a bunch to try to make this display the bad column sizing " +
-        "with colors"), BLUE(
+    write(sprintf("%=10s %=10s\n", RED("taccos"), ORANGE(
         "Hello my nice friends. How are you today? I am writing " +
         "a bunch to try to make this display the bad column sizing " +
         "with colors")
         )
     );
-    write(sprintf("%=10s %=10s %=10s\n", "taccos",
-        "Hello my nice friends. How are you today? I am writing " +
+    write(sprintf("%=10s %=10s %=10s\n", sprintf("%c[31mtaccos%c[0m", 27, 27),
+        sprintf("%c[38;5;208mHello my nice friends. How are you today? " +
+        "I am writing " +
         "a bunch to try to make this display the bad column sizing " +
-        "with colors",
+        "with colors%c[0m", 27, 27),
+        sprintf("%c[38;5;208mHello my nice friends. How are you today? " +
+        "I am writing " +
+        "a bunch to try to make this display the bad column sizing " +
+        "with collrz%c[0m", 27, 27)
+        )
+    );
+    write(sprintf("%=10s %=10s\n", "taccos",
         "Hello my nice friends. How are you today? I am writing " +
         "a bunch to try to make this display the bad column sizing " +
         "with colors"
