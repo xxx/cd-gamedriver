@@ -15,6 +15,9 @@ DESCRIPTION
 
 	If the first argument is an integer, the function simply returns 0.
 
+	If ANSI_COLOR is defined, this function not include ANSI color
+	sequences when it computes line lengths.
+
 SEE ALSO
 	implode, explode, sprintf
 
