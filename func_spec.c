@@ -151,6 +151,7 @@ int	stringp(mixed);
 int	strlen(int|string);
 #ifdef ANSI_COLOR
 int	strlen_printable(int|string);
+int	strip_color(int|string);
 #endif
 void	tail(string);
 float	tan(float);

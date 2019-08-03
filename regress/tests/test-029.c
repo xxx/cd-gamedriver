@@ -193,6 +193,18 @@ void test_sprintf()
         "with colors"
         )
     );
+
+    write(strip_color(RED("testing string") + ORANGE(" testing ") +
+        RED(" wut " )));
+    write("\n\n");
+    write(strlen(strip_color(RED("testing string") + ORANGE(" testing ") +
+        RED(" wut " ))));
+    write("\n\n");
+    write(strlen_printable(RED("testing string") + ORANGE(" testing ") +
+        RED(" wut " )));
+
+    write("\n\n\n");
+    write(strlen(strip_color(sprintf("%c[31taccos", 27))));
 }
 
 void

@@ -1,0 +1,15 @@
+NAME
+	strip_color - Remove color sequences from a string
+
+SYNOPSIS
+	string strip_color(int|string str)
+
+DESCRIPTION
+    Strips out all color codes from the passed string, and returns
+    the cleaned copy. If an integer is passed, 0 is returned.
+
+	This function is not defined unless ANSI_COLOR is defined.
+
+SEE ALSO
+    strlen_printable
+

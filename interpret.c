@@ -5742,6 +5742,19 @@ f_strlen_printable(int xxx)
     pop_stack();
     push_number(i);
 }
+
+static void
+f_strip_color(int xxx)
+{
+    char *str;
+
+    if (sp->type == T_NUMBER)
+        return;
+    str = make_mstring(sp->u.string);
+    strip_color(str);
+    pop_stack();
+    push_mstring(str);
+}
 #endif
 
 /* ARGSUSED */

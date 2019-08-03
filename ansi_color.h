@@ -5,5 +5,6 @@
 #define ANSI_END 'm'
 
 int strlen_printable(char *str);
+char *strip_color(char *str);
 
 #endif // ANSI_COLOR_H
