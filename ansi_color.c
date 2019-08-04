@@ -74,7 +74,7 @@ strip_color(char *chr)
     // are in the middle of a sequence. We treat
     // the unfinished sequence as normal text.
     if (sequence_start) {
-        strcpy(s, sequence_start);
+        memmove(s, sequence_start, (d - s + 1));
     } else {
         *s = '\0';
     }
