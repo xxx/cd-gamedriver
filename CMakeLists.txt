@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14.0)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 project (cd-gamedriver)
 
 find_package(BISON REQUIRED)
