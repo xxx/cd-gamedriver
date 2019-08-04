@@ -1,6 +1,8 @@
 #ifndef _memory_h
 #define _memory_h
 
+#include <stddef.h>
+
 struct allocation_pool {
     size_t size;
     size_t used;

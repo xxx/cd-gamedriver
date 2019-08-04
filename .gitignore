@@ -24,3 +24,5 @@ master.h
 master.t
 genfkntab
 Makefile.depend
+cmake-build*/
+.idea/

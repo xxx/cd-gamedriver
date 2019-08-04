@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>
+#include <string.h>
 
 #include "config.h"
 #include "lint.h"
