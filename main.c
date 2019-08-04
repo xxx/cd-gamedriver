@@ -206,7 +206,7 @@ main(int argc, char **argv)
     init_signals();
 
     if (chdir(mudlib_path) == -1) {
-        (void)fprintf(stderr, "Bad mudlib directory: %s\n", MUD_LIB);
+        (void)fprintf(stderr, "Bad mudlib directory: %s\n", mudlib_path);
 	exit(1);
     }
 
