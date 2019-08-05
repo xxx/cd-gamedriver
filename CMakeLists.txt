@@ -138,3 +138,10 @@ add_custom_target(
     utils
     DEPENDS hname restart_mud
 )
+
+add_custom_target(
+    check
+    DEPENDS driver
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMAND DIR=${CMAKE_BINARY_DIR} ./regress.sh
+)
