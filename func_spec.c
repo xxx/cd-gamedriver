@@ -100,6 +100,9 @@ int	object_time(object default: F_THIS_OBJECT);
 int	objectp(mixed);
 void	obsolete(string);
 function papplyv(function, mixed *);
+#ifdef HAVE_PCRE
+int     pcre_match(int|string, string);
+#endif
 int	pointerp(mixed);
 float	pow(float, float);
 object	present(int|object|string, object *|object default: F_THIS_OBJECT);

@@ -5,6 +5,7 @@ project (cd-gamedriver)
 find_package(BISON REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONC REQUIRED json-c)
+pkg_check_modules(PCRE2 libpcre2-8)
 
 set(MUD_LIB /home/mpd/git-sources/edge/mud/lib)
 set(BINDIR /home/mpd/git-sources/edge/mud/bin)
@@ -14,15 +15,11 @@ set(SRC array.c backend.c call_out.c comm1.c debug.c ed.c hash.c
     mudstat.c ndesc.c net.c nqueue.c object.c otable.c parse.c port.c regexp.c
     random.c signals.c simulate.c simul_efun.c sprintf.c super_snoop.c
     tcpsvc.c telnet.c udpsvc.c wildmat.c stdmalloc.c json.c siphash.c memory.c
-    ansi_color.c )
-set(HEADERS comm.h config.h exec.h incralloc.h inline_eqs.h inline_svalue.h
-    instrs.h interface.h interpret.h mapping.h master.h master.t
-    mstring.h mudstat.h net.h object.h patchlevel.h regexp.h sent.h
-    backend.h bibopmalloc.h json.h random.h siphash.h memory.h ansi_color.h)
+    ansi_color.c pcre.c)
 set(ISRC clib/efun.c clib/stdobject.c clib/gl_language.c)
 set(CSRC ${SRC} lang.c)
 
-SET(CMAKE_C_COMPILER gcc)
+set(CMAKE_C_COMPILER gcc)
 set(CMAKE_C_FLAGS_DEBUG -ggdb)
 
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR})
@@ -85,16 +82,21 @@ add_custom_command(
 # Driver compile/link config
 #
 add_executable(driver ${CSRC} ${ISRC} efun_table.h master.h)
-target_link_libraries(driver ${JSONC_LIBRARIES} crypt m)
+target_link_libraries(driver ${JSONC_LIBRARIES} ${PCRE2_LIBRARIES} crypt m)
 target_include_directories(
     driver
     PUBLIC ${JSONC_INCLUDE_DIRS}
+    PUBLIC ${PCRE2_INCLUDE_DIRS}
 )
 target_compile_options(
     driver
     PUBLIC ${JSONC_CFLAGS_OTHER}
-    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -O3 -fgnu89-inline -Wall -Wformat=2
+    PUBLIC ${PCRE2_CFLAGS_OTHER}
+    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -O0 -fgnu89-inline -Wall -Wformat=2
 )
+
+# non .c/.o files that are created in the build dir need to
+# be set explicitly for cleaning.
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
     master.h
     master.t

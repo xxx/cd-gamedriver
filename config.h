@@ -365,5 +365,13 @@
  */
 #define ANSI_COLOR
 
+/*
+ * HAVE_PCRE
+ *
+ * Perl-compatible regular expressions
+ * When defined, adds pcre_match, pcre_capture, pcre_substitute efuns
+ */
+#define HAVE_PCRE
+
 #endif
 
