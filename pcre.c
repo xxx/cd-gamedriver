@@ -7,6 +7,8 @@
 #include <string.h>
 #include <stdio.h>
 #include "pcre.h"
+#include "lint.h"
+#include "interpret.h"
 
 /* Return a structure that needs to be freed with pcre2_code_free */
 pcre2_code *
@@ -66,6 +68,7 @@ pcre_match(const char *sub, pcre2_code *re, int *rc)
     return match_data;
 }
 
+/* Return 1 if there's a match, else 0 */
 int
 pcre_matches(const char *sub, pcre2_code *re)
 {
@@ -75,4 +78,43 @@ pcre_matches(const char *sub, pcre2_code *re)
 
     return rc > 0;
 }
+
+/* Return matching strings. This is the semantics of the regexp() efun. */
+struct vector *
+pcre_filter(struct vector *subjects, pcre2_code *re)
+{
+    extern int eval_cost;
+    int i, num_match;
+    char *result;
+
+    if (subjects->size == 0)
+        return allocate_array(0);
+    result = (char *)alloca((size_t)subjects->size);
+
+    for (num_match = i = 0; i < subjects->size; i++) {
+        result[i] = 0;
+
+        if (subjects->item[i].type != T_STRING)
+            continue;
+        eval_cost++;
+        if (!pcre_matches(subjects->item[i].u.string, re)) {
+            continue;
+        }
+        result[i] = 1;
+        num_match++;
+    }
+
+    struct vector *ret = allocate_array(num_match);
+
+    for (num_match=i=0; i < subjects->size; i++)
+    {
+        if (result[i] == 0)
+            continue;
+        assign_svalue_no_free(&ret->item[num_match], &subjects->item[i]);
+        num_match++;
+    }
+
+    return ret;
+}
+
 

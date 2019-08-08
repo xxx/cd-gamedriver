@@ -17,8 +17,28 @@ test_pcre_matches()
 }
 
 void
+test_pcre_filter()
+{
+    string regexp = "[Tt]he (?:kinda )?quick brown fox";
+
+    string *strs = ({
+        "The quick brown fox jumped over the lazy dog.",
+        "the quick brown fox jumped over the lazy dog.",
+        "brown fox jumped over the lazy dog",
+        "quick brown fox jumped",
+        "the kinda quick brown fox jumped",
+        "THE QUICK BROWN FOX JUMPED"
+    });
+
+    foreach(string str: pcre_filter(strs, regexp)) {
+        write("pcre_filter matched: " + str + "\n");
+    }
+}
+
+void
 create()
 {
 
     test_pcre_matches();
+    test_pcre_filter();
 }
