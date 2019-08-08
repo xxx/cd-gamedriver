@@ -1,0 +1,33 @@
+NAME
+	pcre_capture - return matched substrings using a Perl-compatible regular
+                   expression
+
+SYNOPSIS
+	string *pcre_capture(string str, string pattern)
+
+DESCRIPTION
+    Returns the captured substrings when str is matched against pattern,
+    which is a Perl-compatible regular expression, as defined by
+    libpcre2 (https://www.pcre.org/).
+
+    Returns an array of matched substrings.
+
+    This function is not defined unless HAVE_PCRE is defined a build time.
+
+EXAMPLE
+    string regexp = "(?i)(The ((?:kinda )?quick) brown) fox";
+    string str = "the kinda quick brown fox jumped over the lazy dog.";
+
+    string *result = pcre_capture(str, regexp);
+
+    /* 
+    result is ({ 
+      "the kinda quick brown fox",
+      "the kinda quick brown",
+      "kinda quick"
+    })
+    */
+
+SEE ALSO
+    pcre_filter, pcre_capture
+

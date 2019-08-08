@@ -1,0 +1,26 @@
+NAME
+	pcre_filter - filter a list for strings that match a given Perl-compatible
+                  regular expression
+
+SYNOPSIS
+	string *pcre_filter(string *strs, string pattern)
+
+DESCRIPTION
+    Returns all members of strs that match pattern, which is a regular
+    expression, as defined by libpcre2 (https://www.pcre.org/).
+
+    This function has the same semantics as regexp(), but matches against
+    PCRE's instead.
+
+    Returns an array of matching strings.
+
+    This function is not defined unless HAVE_PCRE is defined a build time.
+
+NOTES
+    Using this function is preferred over something like
+    filter(strs, &pcre_matches(,pattern)), as this function compiles the regexp
+    only 1 time, compared to once per call to pcre_matches() 
+
+SEE ALSO
+    pcre_matches, pcre_capture, regexp
+
