@@ -88,12 +88,11 @@ pcre_filter(struct vector *subjects, pcre2_code *re)
 {
     extern int eval_cost;
     unsigned int i, num_match;
-    char *result;
 
     if (subjects->size == 0)
         return allocate_array(0);
 
-    result = (char *)alloca((size_t)subjects->size);
+    char result[(size_t)subjects->size];
 
     for (num_match = i = 0; i < subjects->size; i++) {
         result[i] = 0;
