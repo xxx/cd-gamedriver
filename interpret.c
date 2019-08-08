@@ -2037,10 +2037,9 @@ f_pcre_matches(int num_arg)
         return;
     }
 
-    int error_number = 0;
     char error_buffer[BUFSIZ];
     pcre2_code *re = pcre_compile(
-        sp->u.string, &error_number, error_buffer
+        sp->u.string, error_buffer
     );
 
     if (re == NULL) {
@@ -2064,10 +2063,9 @@ f_pcre_filter(int num_arg)
         return;
     }
 
-    int error_number = 0;
     char error_buffer[BUFSIZ];
     pcre2_code *re = pcre_compile(
-        sp->u.string, &error_number, error_buffer
+        sp->u.string, error_buffer
     );
 
     if (re == NULL) {
@@ -2095,10 +2093,9 @@ f_pcre_capture(int num_arg)
         return;
     }
 
-    int error_number = 0;
     char error_buffer[BUFSIZ];
     pcre2_code *re = pcre_compile(
-        sp->u.string, &error_number, error_buffer
+        sp->u.string, error_buffer
     );
 
     if (re == NULL) {

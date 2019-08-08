@@ -14,17 +14,18 @@
 /* Return a structure that needs to be freed with pcre2_code_free */
 /* error_buffer should be at least BUFSIZ bytes in length */
 pcre2_code *
-pcre_compile(const char *pat, int *error_number, char *error_buffer)
+pcre_compile(const char *pat, char *error_buffer)
 {
     pcre2_code *re;
     PCRE2_SIZE error_offset;
     PCRE2_SPTR pattern = (PCRE2_SPTR)pat;
+    int error_number;
 
     re = pcre2_compile(
         pattern,               /* the pattern */
         PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
         0,                     /* default options */
-        error_number,          /* for error number */
+        &error_number,          /* for error number */
         &error_offset,         /* for error offset */
         NULL);                 /* use default compile context */
 
@@ -34,7 +35,7 @@ pcre_compile(const char *pat, int *error_number, char *error_buffer)
     {
         PCRE2_UCHAR err[256];
         pcre2_get_error_message(
-            *error_number, err, sizeof(err)
+            error_number, err, sizeof(err)
         );
         snprintf(error_buffer, BUFSIZ,
             "PCRE2 compilation failed at offset %d: %s",
