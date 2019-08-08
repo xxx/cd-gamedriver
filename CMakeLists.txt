@@ -98,7 +98,7 @@ target_compile_options(
     driver
     PUBLIC ${JSONC_CFLAGS_OTHER}
     PUBLIC ${PCRE2_CFLAGS_OTHER}
-    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
+    PRIVATE -pipe -O3 -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
 )
 
 # non .c/.o files that are created in the build dir need to
