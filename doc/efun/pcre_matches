@@ -10,7 +10,7 @@ DESCRIPTION
 
     Returns 1 if str matches, and 0 if not.
 
-    This function is not defined unless HAVE_PCRE is defined a build time.
+    This function is not defined unless HAVE_PCRE is defined at build time.
 
 SEE ALSO
     pcre_filter, pcre_capture

@@ -12,7 +12,7 @@ DESCRIPTION
 
     Returns an array of matched substrings.
 
-    This function is not defined unless HAVE_PCRE is defined a build time.
+    This function is not defined unless HAVE_PCRE is defined at build time.
 
 EXAMPLE
     string regexp = "(?i)(The ((?:kinda )?quick) brown) fox";

@@ -14,7 +14,7 @@ DESCRIPTION
 
     Returns an array of matching strings.
 
-    This function is not defined unless HAVE_PCRE is defined a build time.
+    This function is not defined unless HAVE_PCRE is defined at build time.
 
 NOTES
     Using this function is preferred over something like
