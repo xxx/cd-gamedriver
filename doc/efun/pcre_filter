@@ -1,9 +1,9 @@
 NAME
-	pcre_filter - filter a list for strings that match a given Perl-compatible
+    pcre_filter - filter a list for strings that match a given Perl-compatible
                   regular expression
 
 SYNOPSIS
-	string *pcre_filter(string *strs, string pattern)
+    string *pcre_filter(string *strs, string pattern)
 
 DESCRIPTION
     Returns all members of strs that match pattern, which is a regular

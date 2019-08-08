@@ -1,9 +1,9 @@
 NAME
-	pcre_capture - return matched substrings using a Perl-compatible regular
+    pcre_capture - return matched substrings using a Perl-compatible regular
                    expression
 
 SYNOPSIS
-	string *pcre_capture(string str, string pattern)
+    string *pcre_capture(string str, string pattern)
 
 DESCRIPTION
     Returns the captured substrings when str is matched against pattern,

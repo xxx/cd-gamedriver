@@ -1,11 +1,11 @@
 NAME
-	pcre_matches - does a string match a given Perl-compatible regular expression 
+    pcre_matches - does a string match a given Perl-compatible regular expression
 
 SYNOPSIS
-	int pcre_matches(string str, string pattern)
+    int pcre_matches(string str, string pattern)
 
 DESCRIPTION
-	Determine whether str matches pattern, which is a Perl-compatible
+    Determine whether str matches pattern, which is a Perl-compatible
     regular expression, as defined by libpcre2 (https://www.pcre.org/).
 
     Returns 1 if str matches, and 0 if not.
