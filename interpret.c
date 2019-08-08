@@ -2080,6 +2080,33 @@ f_pcre_filter(int num_arg)
     pop_n_elems(2);
     push_vector(result, FALSE);
 }
+
+/* ARGSUSED */
+static void
+f_pcre_capture(int num_arg)
+{
+    if ((sp-1)->type == T_NUMBER) {
+        pop_n_elems(2);
+        push_number(0);
+        return;
+    }
+
+    int error_number = 0;
+    char error_buffer[BUFSIZ];
+    pcre2_code *re = pcre_compile(
+        sp->u.string, &error_number, error_buffer
+    );
+
+    if (re == NULL) {
+        error("%s\n", error_buffer);
+    }
+
+    struct vector *result = pcre_capture((sp-1)->u.string, re);
+    pcre2_code_free(re);
+
+    pop_n_elems(2);
+    push_vector(result, FALSE);
+}
 #endif
 
 /* ARGSUSED */

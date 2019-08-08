@@ -9,8 +9,10 @@
 #include "pcre.h"
 #include "lint.h"
 #include "interpret.h"
+#include "mstring.h"
 
 /* Return a structure that needs to be freed with pcre2_code_free */
+/* error_buffer should be at least BUFSIZ bytes in length */
 pcre2_code *
 pcre_compile(const char *pat, int *error_number, char *error_buffer)
 {
@@ -51,7 +53,7 @@ pcre2_match_data *
 pcre_match(const char *sub, pcre2_code *re, int *rc)
 {
     PCRE2_SPTR subject = (PCRE2_SPTR)sub;
-    int subject_length = strlen((char *)subject);
+    size_t subject_length = strlen((char *)subject);
 
     pcre2_match_data *match_data =
         pcre2_match_data_create_from_pattern(re, NULL);
@@ -84,11 +86,12 @@ struct vector *
 pcre_filter(struct vector *subjects, pcre2_code *re)
 {
     extern int eval_cost;
-    int i, num_match;
+    unsigned int i, num_match;
     char *result;
 
     if (subjects->size == 0)
         return allocate_array(0);
+
     result = (char *)alloca((size_t)subjects->size);
 
     for (num_match = i = 0; i < subjects->size; i++) {
@@ -106,13 +109,58 @@ pcre_filter(struct vector *subjects, pcre2_code *re)
 
     struct vector *ret = allocate_array(num_match);
 
-    for (num_match=i=0; i < subjects->size; i++)
-    {
+    for (num_match=i=0; i < subjects->size; i++) {
         if (result[i] == 0)
             continue;
         assign_svalue_no_free(&ret->item[num_match], &subjects->item[i]);
         num_match++;
     }
+
+    return ret;
+}
+
+/* Return captured substrings */
+struct vector *
+pcre_capture(const char *sub, pcre2_code *re)
+{
+    int rc = 0, i;
+
+    pcre2_match_data *match_data = pcre_match(sub, re, &rc);
+
+    if (rc < 1) {
+        pcre2_match_data_free(match_data);
+        return NULL;
+    }
+
+    PCRE2_SIZE *ovector = pcre2_get_ovector_pointer(match_data);
+
+    /* We must guard against patterns such as /(?=.\K)/ that use \K in an assertion
+       to set the start of a match later than its end. In this demonstration program,
+       we just detect this case and give up. */
+
+    if (ovector[0] > ovector[1]) {
+        pcre2_match_data_free(match_data);
+        return NULL;
+    }
+
+    PCRE2_SPTR subject = (PCRE2_SPTR)sub;
+    struct vector *ret = allocate_array(rc);
+
+    char buff[strlen(sub) + 1];
+
+    for (i = 0; i < rc; i++) {
+        PCRE2_SPTR substring_start = subject + ovector[2*i];
+        size_t substring_length = ovector[2*i+1] - ovector[2*i];
+
+        strncpy(buff, (char *)substring_start, substring_length);
+        buff[substring_length] = '\0';
+
+        ret->item[i].type = T_STRING;
+        ret->item[i].string_type = STRING_MSTRING;
+        ret->item[i].u.string = make_mstring(buff);
+    }
+
+    pcre2_match_data_free(match_data);
 
     return ret;
 }
