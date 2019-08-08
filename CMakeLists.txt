@@ -87,10 +87,6 @@ add_custom_command(
 # Driver compile/link config
 #
 
-if(CMAKE_BUILD_TYPE STREQUAL Debug)
-    set(OPTIMIZATION -O0)
-endif() # Release is automatically -O3
-
 add_executable(driver ${CSRC} ${ISRC} efun_table.h master.h)
 target_link_libraries(driver ${JSONC_LIBRARIES} ${PCRE2_LIBRARIES} crypt m)
 target_include_directories(
@@ -102,7 +98,6 @@ target_compile_options(
     driver
     PUBLIC ${JSONC_CFLAGS_OTHER}
     PUBLIC ${PCRE2_CFLAGS_OTHER}
-    PRIVATE ${OPTIMIZATION}
     PRIVATE -pipe -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
 )
 
