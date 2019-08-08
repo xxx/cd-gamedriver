@@ -2078,7 +2078,11 @@ f_pcre_filter(int num_arg)
     pcre2_code_free(re);
 
     pop_n_elems(2);
-    push_vector(result, FALSE);
+    if (result == NULL) {
+        push_number(0);
+    } else {
+        push_vector(result, FALSE);
+    }
 }
 
 /* ARGSUSED */
@@ -2105,7 +2109,11 @@ f_pcre_capture(int num_arg)
     pcre2_code_free(re);
 
     pop_n_elems(2);
-    push_vector(result, FALSE);
+    if (result == NULL) {
+        push_number(0);
+    } else {
+        push_vector(result, FALSE);
+    }
 }
 #endif
 
