@@ -101,7 +101,8 @@ int	objectp(mixed);
 void	obsolete(string);
 function papplyv(function, mixed *);
 #ifdef HAVE_PCRE
-int     pcre_match(int|string, string);
+int     pcre_matches(int|string, string);
+//string *pcre_filter(string *, string);
 #endif
 int	pointerp(mixed);
 float	pow(float, float);

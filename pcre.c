@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "pcre.h"
 
+/* Return a structure that needs to be freed with pcre2_code_free */
 pcre2_code *
 pcre_compile(const char *pat, int *error_number, char *error_buffer)
 {
@@ -43,8 +44,9 @@ pcre_compile(const char *pat, int *error_number, char *error_buffer)
     return re;
 }
 
-int
-pcre_match(const char *sub, pcre2_code *re)
+/* Return a match_data that needs to be freed with pcre2_match_data_free */
+pcre2_match_data *
+pcre_match(const char *sub, pcre2_code *re, int *rc)
 {
     PCRE2_SPTR subject = (PCRE2_SPTR)sub;
     int subject_length = strlen((char *)subject);
@@ -52,16 +54,25 @@ pcre_match(const char *sub, pcre2_code *re)
     pcre2_match_data *match_data =
         pcre2_match_data_create_from_pattern(re, NULL);
 
-    int rc = pcre2_match(
-        re,                   /* the compiled pattern */
-        subject,              /* the subject string */
-        subject_length,       /* the length of the subject */
-        0,                    /* start at offset 0 in the subject */
-        0,                    /* default options */
-        match_data,           /* block for storing the result */
-        NULL);
+    *rc = pcre2_match(
+          re,                   /* the compiled pattern */
+          subject,              /* the subject string */
+          subject_length,       /* the length of the subject */
+          0,                    /* start at offset 0 in the subject */
+          0,                    /* default options */
+          match_data,           /* block for storing the result */
+          NULL);
 
+    return match_data;
+}
+
+int
+pcre_matches(const char *sub, pcre2_code *re)
+{
+    int rc = 0;
+    pcre2_match_data *match_data = pcre_match(sub, re, &rc);
     pcre2_match_data_free(match_data);   /* Release memory used for the match */
 
-    return rc > -1;
+    return rc > 0;
 }
+

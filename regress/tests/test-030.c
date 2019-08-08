@@ -5,20 +5,20 @@
  */
 
 void
-test_pcre_match()
+test_pcre_matches()
 {
     function output = &sprintf("matched (should be %d): %d\n", ,);
     string str = "The quick brown fox jumped over the lazy dog";
 
-    write(output(1, pcre_match(str, "quick brown fox")));
-    write(output(0, pcre_match(str, "^quick brown fox")));
-    write(output(1, pcre_match(str, "(?i)the quick brown fox")));
-    write(output(0, pcre_match(str, "the quick brown fox")));
+    write(output(1, pcre_matches(str, "quick brown fox")));
+    write(output(0, pcre_matches(str, "^quick brown fox")));
+    write(output(1, pcre_matches(str, "(?i)the quick brown fox")));
+    write(output(0, pcre_matches(str, "the quick brown fox")));
 }
 
 void
 create()
 {
 
-    test_pcre_match();
+    test_pcre_matches();
 }

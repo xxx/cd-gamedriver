@@ -2029,7 +2029,7 @@ f_regexp(int num_arg)
 #ifdef HAVE_PCRE
 /* ARGSUSED */
 static void
-f_pcre_match(int num_arg)
+f_pcre_matches(int num_arg)
 {
     if ((sp-1)->type == T_NUMBER) {
         pop_n_elems(2);
@@ -2047,7 +2047,7 @@ f_pcre_match(int num_arg)
         error("%s\n", error_buffer);
     }
 
-    int result = pcre_match((sp-1)->u.string, re);
+    int result = pcre_matches((sp-1)->u.string, re);
     pcre2_code_free(re);
 
     pop_n_elems(2);
