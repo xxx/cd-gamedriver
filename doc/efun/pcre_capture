@@ -29,5 +29,5 @@ EXAMPLE
     */
 
 SEE ALSO
-    pcre_filter, pcre_capture
+    pcre_filter, pcre_matches
 
