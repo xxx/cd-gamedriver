@@ -7,8 +7,13 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONC REQUIRED json-c)
 pkg_check_modules(PCRE2 libpcre2-8)
 
+# Set these to whatever is correct for you.
 set(MUD_LIB /home/mpd/git-sources/edge/mud/lib)
 set(BINDIR /home/mpd/git-sources/edge/mud/bin)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif(NOT CMAKE_BUILD_TYPE)
 
 set(SRC array.c backend.c call_out.c comm1.c debug.c ed.c hash.c
     hname.c interface.c interpret.c lex.c main.c mapping.c mstring.c
@@ -81,6 +86,11 @@ add_custom_command(
 #
 # Driver compile/link config
 #
+
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(OPTIMIZATION -O0)
+endif() # Release is automatically -O3
+
 add_executable(driver ${CSRC} ${ISRC} efun_table.h master.h)
 target_link_libraries(driver ${JSONC_LIBRARIES} ${PCRE2_LIBRARIES} crypt m)
 target_include_directories(
@@ -92,7 +102,8 @@ target_compile_options(
     driver
     PUBLIC ${JSONC_CFLAGS_OTHER}
     PUBLIC ${PCRE2_CFLAGS_OTHER}
-    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -O3 -fgnu89-inline -Wall -Wformat=2
+    PRIVATE ${OPTIMIZATION}
+    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
 )
 
 # non .c/.o files that are created in the build dir need to
