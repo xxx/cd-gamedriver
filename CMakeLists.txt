@@ -8,8 +8,8 @@ pkg_check_modules(JSONC REQUIRED json-c)
 pkg_check_modules(PCRE2 libpcre2-8)
 
 # Set these to whatever is correct for you.
-set(MUD_LIB /home/mpd/git-sources/edge/mud/lib)
-set(BINDIR /home/mpd/git-sources/edge/mud/bin)
+set(MUD_LIB /edge/sanitys_edge/mud/lib)
+set(BINDIR /edge/sanitys_edge/mud/bin)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
