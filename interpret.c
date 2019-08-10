@@ -2648,9 +2648,15 @@ f_write_socket_gmcp(int num_arg)
 
     if (current_object->interactive)
     {
-        json = val2json(sp);
-        str = (char *)xalloc(strlen(json) + strlen((sp - 1)->u.string) + 2);
-        strcpy(str, (sp - 1)->u.string); 
+        if ((sp)->u.number == 0) {
+            json = val2json(sp - 1);
+        } else {
+            json = (char *)xalloc(strlen((sp - 1)->u.string) + 1);
+            (void)strcpy(json, (sp - 1)->u.string);
+        }
+
+        str = (char *)xalloc(strlen(json) + strlen((sp - 2)->u.string) + 2);
+        strcpy(str, (sp - 2)->u.string);
         strcat(str, " ");
         strcat(str, json);
 
@@ -2659,7 +2665,7 @@ f_write_socket_gmcp(int num_arg)
         free(json);
     }
 
-    pop_n_elems(2);
+    pop_n_elems(3);
     push_number(0);
 }
 
