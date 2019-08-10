@@ -2651,8 +2651,12 @@ f_write_socket_gmcp(int num_arg)
         if ((sp)->u.number == 0) {
             json = val2json(sp - 1);
         } else {
-            json = (char *)xalloc(strlen((sp - 1)->u.string) + 1);
-            (void)strcpy(json, (sp - 1)->u.string);
+            if ((sp - 1)->type == T_STRING) {
+                json = (char *)xalloc(strlen((sp - 1)->u.string) + 1);
+                (void)strcpy(json, (sp - 1)->u.string);
+            } else {
+                error("data argument must be a string when raw is set.\n");
+            }
         }
 
         str = (char *)xalloc(strlen(json) + strlen((sp - 2)->u.string) + 2);
