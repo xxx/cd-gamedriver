@@ -717,6 +717,12 @@ telnet_ack_lenab(telnet_t *tp, u_char opt)
             break;
         case TELOPT_MSSP:
             break;
+#ifdef USE_UTF8
+        case TELOPT_CHARSET:
+            telnet_send_sb(tp, TELOPT_CHARSET, (u_char *)";UTF-8");
+            tp->t_flags |= TF_UTF8;
+            break;
+#endif
     }
 }
 
@@ -916,6 +922,30 @@ telnet_disable_mssp(telnet_t *tp)
         return;
 
     telnet_neg_ldisab(tp, TELOPT_MSSP);
+}
+
+/*
+ * Enable UTF8
+ */
+void
+telnet_enable_utf8(telnet_t *tp)
+{
+    if (nq_avail(tp->t_outq) < 3)
+        return;
+
+    telnet_neg_lenab(tp, TELOPT_CHARSET);
+}
+
+/*
+ * Disable UTF8
+ */
+void
+telnet_disable_utf8(telnet_t *tp)
+{
+    if (nq_avail(tp->t_outq) < 3)
+        return;
+
+    telnet_neg_ldisab(tp, TELOPT_CHARSET);
 }
 
 /*
@@ -1514,7 +1544,9 @@ telnet_accept(void *vp)
     /* Start negotiation of optional features */
     telnet_enable_gmcp(tp);
     telnet_enable_mssp(tp);
-
+#ifdef USE_UTF8
+    telnet_enable_utf8(tp);
+#endif
     ip = (void *)new_player(tp, &addr, addrlen, local_port);
     if (ip == NULL)
     {

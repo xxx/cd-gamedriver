@@ -373,5 +373,12 @@
  */
 #define HAVE_PCRE
 
+/*
+ * USE_UTF8
+ *
+ * Treat strings as UTF-8 sequences, rather than ASCII
+ */
+#define USE_UTF8
+
 #endif
 

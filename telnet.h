@@ -62,6 +62,7 @@ typedef struct {
 #define OP_GMCP         3 
 #define OP_MSSP         4
 #define OP_SIZE         5
+#define OP_UTF8         6
 
 /*
  * Telnet Control Block.
@@ -97,7 +98,7 @@ typedef struct {
 #define	TF_ECHO			0x1000
 #define	TF_SGA			0x2000
 #define TF_GMCP         0x4000
-
+#define TF_UTF8         0x8000
 
 /*
  * Telnet Input States.
@@ -113,7 +114,9 @@ typedef struct {
 #define	TS_IAC_DO		8
 #define	TS_IAC_DONT		9
 
-
+#ifdef USE_UTF8
+#define TELOPT_CHARSET  42
+#endif
 #define TELOPT_MSSP     70
 #define TELOPT_GMCP     201
 #define	TELOPT_CDM		205
