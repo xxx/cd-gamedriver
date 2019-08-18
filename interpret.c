@@ -5827,9 +5827,13 @@ f_strlen(int xxx)
 
     if (sp->type == T_NUMBER)
 	i = 0;
-    else
+    else {
+#ifdef USE_UTF8
+        i = g_utf8_strlen(sp->u.string, -1);
+#else
         i = strlen(sp->u.string);
-
+#endif
+    }
     pop_stack();
     push_number(i);
 }

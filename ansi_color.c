@@ -5,6 +5,10 @@
  */
 #include <string.h>
 #include "ansi_color.h"
+#include "config.h"
+#ifdef USE_UTF8
+#include <glib.h>
+#endif
 
 int
 strlen_printable(char *chr)
@@ -35,7 +39,16 @@ strlen_printable(char *chr)
             ansi_len++;
         }
 
+#ifdef USE_UTF8
+        /*
+         * valid sgr sequence characters are all ascii, so this is
+         * the only thing that needs updating, since we can get
+         * away with checking the first byte only.
+         */
+        chr = g_utf8_next_char(chr);
+#else
         chr++;
+#endif
     }
 
     return i;

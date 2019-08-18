@@ -4,7 +4,7 @@
 
 #define RED(txt) sprintf("%c[31m%s%c[0m", ESC, txt, ESC)
 #define ORANGE(txt) sprintf("%c[38;5;208m%s%c[0m", ESC, txt, ESC)
-#define BLUE(txt) sprintf("%c[12m%s%c[0m", ESC, txt, ESC)
+#define BLUE(txt) sprintf("%c[34m%s%c[0m", ESC, txt, ESC)
 
 /*
  * Some tests around the #define of ANSI_COLOR

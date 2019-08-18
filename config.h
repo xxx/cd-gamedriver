@@ -369,7 +369,7 @@
  * HAVE_PCRE
  *
  * Perl-compatible regular expressions
- * When defined, adds pcre_match, pcre_capture, pcre_substitute efuns
+ * When defined, adds pcre_matches, pcre_capture, pcre_filter efuns
  */
 #define HAVE_PCRE
 
@@ -377,6 +377,8 @@
  * USE_UTF8
  *
  * Treat strings as UTF-8 sequences, rather than ASCII
+ * When defined, updates readable_string(), strlen()/strlen_printable(),
+ *   break_string(), and sprintf() efuns to assume multibyte characters.
  */
 #define USE_UTF8
 
