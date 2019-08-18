@@ -32,6 +32,11 @@
 #include "ansi_color.h"
 #endif
 
+#ifdef USE_UTF8
+#include "utf8.h"
+#include <glib.h>
+#endif
+
 extern int d_flag; /* for debugging purposes */
 extern struct object *previous_ob;
 struct object *vbfc_object;
@@ -2002,8 +2007,8 @@ process_value(char *str, int other_ob)
 
 /*
  * Function name: break_string
- * Description:   Breaks a continous string without newlines into a string
- *		  with newlines inserted at regular intervalls replacing spaces
+ * Description:   Breaks a continuous string without newlines into a string
+ *		  with newlines inserted at regular intervals replacing spaces
  *		  Each newline separated string can be indented with a given
  *		  number of spaces.
  * Arguments:     str: Original message
@@ -2065,7 +2070,11 @@ break_string(char *str, int width, struct svalue *indent)
     int ansi_len = 0;
     int in_ansi = 0;
 #endif
+#ifdef USE_UTF8
+    for(il = 0; il < l; il += UTF8_LENGTH(g_utf8_get_char(&fstr[il])))
+#else
     for (il = 0; il < l; il++)
+#endif
     {
 #ifdef ANSI_COLOR
         if (!in_ansi && fstr[il] == ANSI_START)

@@ -15,8 +15,13 @@ DESCRIPTION
 
 	If the first argument is an integer, the function simply returns 0.
 
-	If ANSI_COLOR is defined, this function not include ANSI color
+	If ANSI_COLOR is defined, this function will not include ANSI color
 	sequences when it computes line lengths.
+
+	If USE_UTF8 is defined, this function will count the number of
+	displayed columns to determine the break, rather than unicode
+	characters (which can take up 1 or 2 columns), or bytes (UTF-8 is
+	anywhere from 1-6 bytes per character).
 
 SEE ALSO
 	implode, explode, sprintf

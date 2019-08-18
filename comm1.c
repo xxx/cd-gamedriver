@@ -41,7 +41,7 @@
 #endif
 
 #ifdef USE_UTF8
-#include "glib.h"
+#include <glib.h>
 #include "utf8.h"
 #endif
 
@@ -213,7 +213,6 @@ write_gmcp(struct object *ob, char *data)
         return;
 
     telnet_output_gmcp(ip->tp, (u_char *)data);
-
 }
 
 /*

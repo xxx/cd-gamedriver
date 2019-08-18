@@ -11,3 +11,6 @@ DESCRIPTION
 	When ANSI_COLOR is defined, this will give the true length of a string,
 	including non-printable characters. Use strlen_printable() if you do
 	not want escape sequence characters included.
+
+	When USE_UTF8 is defined, this returns the number of unicode characters
+	in the string, rather than number of bytes.

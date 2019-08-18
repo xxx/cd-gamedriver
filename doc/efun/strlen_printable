@@ -11,6 +11,9 @@ DESCRIPTION
 
 	This function is not defined unless ANSI_COLOR is defined.
 
+	If USE_UTF8 is defined, will give the length of the number of shown UTF-8
+	characters, rather than number of bytes.
+
 SEE ALSO
     strip_color
 
