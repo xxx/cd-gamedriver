@@ -47,6 +47,11 @@
 #include "pcre.h"
 #endif
 
+#ifdef USE_UTF8
+#include <locale.h>
+#include "glib.h"
+#endif
+
 #define FLOATASGOP(lhs, op, rhs) { lhs op (double)rhs; }
 
 
@@ -5999,21 +6004,60 @@ f_lower_case(int num_arg)
 
 #define ISPRINT(c) (isprint(c) || (c) >= 0xa0)
 
+#define UTF8_LENGTH(Char)              \
+  ((Char) < 0x80 ? 1 :                 \
+   ((Char) < 0x800 ? 2 :               \
+    ((Char) < 0x10000 ? 3 :            \
+     ((Char) < 0x200000 ? 4 :          \
+      ((Char) < 0x4000000 ? 5 : 6)))))
+
 /* ARGSUSED */
 static void
 f_readable_string(int num_arg)
 {
-    char *str;
-    int  i, c;
-
     if (sp->type == T_NUMBER)
 	return;
+
+    char *str;
+#ifdef USE_UTF8
+    gchar *out = g_locale_to_utf8(sp->u.string, -1, NULL, NULL, NULL);
+
+    if (!g_utf8_validate(out, -1, NULL)) {
+        gchar *invalid = out;
+        out = g_utf8_make_valid(invalid, -1);
+        g_free(invalid);
+    }
+
+    gchar *iter = out;
+
+    while (*iter) {
+        gunichar uc = g_utf8_get_char(iter);
+        if (!g_unichar_isprint(uc)) {
+            // Fill in all bytes of this codepoint with '.'
+            int utf_len = UTF8_LENGTH(*iter);
+            for(int i = 0; i < utf_len; i++) {
+                *(iter + i) = '.';
+            }
+        }
+
+        iter = g_utf8_next_char(iter);
+    }
+
+    /*
+     * We don't convert back to the locale, since
+     * we this will be going to the game.
+     */
+
+    str = (char *)out;
+#else
+    int  i, c;
     str = make_mstring(sp->u.string);
     for (i = strlen(str)-1; i>=0; i--) {
 	c = str[i] & 0xff;
 	if (c < ' ' || !ISPRINT(c) ) /* A quick hack for 8859 -- LA */
 	    str[i] = '.';
     }
+#endif
     pop_stack();
     push_mstring(str);
 }

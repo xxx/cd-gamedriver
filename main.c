@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <locale.h>
 
 #include "memory.h"
 #include "config.h"
@@ -193,6 +194,9 @@ main(int argc, char **argv)
     reserved_area = malloc(RESERVED_SIZE);
 #endif
 
+#ifdef USE_UTF8
+    setlocale(LC_ALL, "");
+#endif
     init_random();
     init_tasks();
     query_load_av();
