@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.14.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 project (cd-gamedriver)
 
+# Set these to whatever is correct for you.
+set(MUD_LIB /edge/sanitys_edge/mud/lib)
+set(BINDIR /edge/sanitys_edge/mud/bin)
+
 find_package(BISON REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(
@@ -10,10 +14,6 @@ pkg_check_modules(
     IMPORTED_TARGET libpcre2-8
     IMPORTED_TARGET glib-2.0
 )
-
-# Set these to whatever is correct for you.
-set(MUD_LIB /edge/sanitys_edge/mud/lib)
-set(BINDIR /edge/sanitys_edge/mud/bin)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
