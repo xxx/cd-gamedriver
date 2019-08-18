@@ -48,8 +48,8 @@
 #endif
 
 #ifdef USE_UTF8
-#include <locale.h>
 #include "glib.h"
+#include "utf8.h"
 #endif
 
 #define FLOATASGOP(lhs, op, rhs) { lhs op (double)rhs; }
@@ -6007,13 +6007,6 @@ f_lower_case(int num_arg)
 }
 
 #define ISPRINT(c) (isprint(c) || (c) >= 0xa0)
-
-#define UTF8_LENGTH(Char)              \
-  ((Char) < 0x80 ? 1 :                 \
-   ((Char) < 0x800 ? 2 :               \
-    ((Char) < 0x10000 ? 3 :            \
-     ((Char) < 0x200000 ? 4 :          \
-      ((Char) < 0x4000000 ? 5 : 6)))))
 
 /* ARGSUSED */
 static void

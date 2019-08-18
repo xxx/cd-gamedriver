@@ -40,6 +40,11 @@
 #include "ansi_color.h"
 #endif
 
+#ifdef USE_UTF8
+#include "glib.h"
+#include "utf8.h"
+#endif
+
 void set_prompt (char *);
 void prepare_ipc (void);
 void ipc_remove (void);
@@ -221,9 +226,19 @@ write_socket(char *cp, struct object *ob)
     int telnet_overflow = 0, overflow = 0;
 #ifdef WORD_WRAP
     int len, current_column;
-    char *bp, buf[MAX_WRITE_SOCKET_SIZE + 2];
+    char *bp;
+#ifdef USE_UTF8
+    // We add extra bytes, in case we split a UTF-8 char during an overflow
+    char buf[MAX_WRITE_SOCKET_SIZE + 7];
+#else
+    char buf[MAX_WRITE_SOCKET_SIZE + 2];
+#endif
 #ifdef ANSI_COLOR
     int ansi_len = 0, in_ansi = 0;
+#endif
+#ifdef USE_UTF8
+    // the len declared above is still the number of bytes.
+    int col_len = 0; // length of displayed columns. Some chars use 2 cols.
 #endif
 #endif
 
@@ -293,15 +308,25 @@ write_socket(char *cp, struct object *ob)
 		    if (telnet_overflow)
 			break;
 
-		    while (*cp == ' ' || *cp == '\t')
+		    // This also works for UTF-8
+                    while (*cp == ' ' || *cp == '\t')
 			cp++;
+
 #ifdef ANSI_COLOR
 		    ansi_len = 0;
 #endif
 		}
 		else
 		{
+#ifdef USE_UTF8
+		    gunichar uc = g_utf8_get_char(cp);
+		    int uc_len = UTF8_LENGTH(uc);
+		    memcpy(bp, cp, uc_len);
+		    bp += uc_len;
+		    cp += uc_len;
+#else
 		    *bp++ = *cp++;
+#endif
 		}
 		continue;
 	    }
@@ -317,26 +342,53 @@ write_socket(char *cp, struct object *ob)
                 ansi_len++;
             }
 #endif
-	    len = 1;
+	    len = 1; // include the null byte
+#ifdef USE_UTF8
+            col_len = 1;
+            char *utf_iter = cp + 1; // + 1 for null byte
+            gunichar prev_char = g_utf8_get_char(cp);
+            gunichar uc = g_utf8_get_char(utf_iter);
+
+            while(g_unichar_isgraph(uc) && prev_char != '-')
+#else
 	    while (cp[len] > ' ' && cp[len - 1] != '-')
+#endif
             {
 #ifdef ANSI_COLOR
                 if (in_ansi)
                 {
                     ansi_len++;
-
+#ifdef USE_UTF8
+                    if (*utf_iter == ANSI_END)
+#else
                     if (cp[len] == ANSI_END)
+#endif
                         in_ansi = 0;
                 }
 #endif
+#ifdef USE_UTF8
+                len += UTF8_LENGTH(uc);
+                col_len += (g_unichar_iswide(uc) ? 2 : 1);
+                utf_iter = g_utf8_next_char(utf_iter);
+                prev_char = uc;
+                uc = g_utf8_get_char(utf_iter);
+#else
                 len++;
+#endif
             }
 
-#ifdef ANSI_COLOR
-            if (current_column + len - ansi_len >= ip->screen_width)
-#else
-            if (current_column + len >= ip->screen_width)
+// Just want to keep this sane since we're juggling 2 optional defines here
+// Let the optimizer figure the rest out.
+#ifndef USE_UTF8
+            int col_len = len;
 #endif
+
+#ifdef ANSI_COLOR
+            int new_len = col_len - ansi_len;
+#else
+            int new_len = col_len;
+#endif
+            if (current_column + new_len >= ip->screen_width)
 	    {
                 if (current_column > ip->screen_width * 4 / 5)
 		{
@@ -361,22 +413,33 @@ write_socket(char *cp, struct object *ob)
 
 	    if (bp + len > &buf[MAX_WRITE_SOCKET_SIZE])
 	    {
+                // This can split UTF-8 chars, making them invalid.
+                // We fix this further down.
 	        len = (&buf[MAX_WRITE_SOCKET_SIZE] - bp);
 	        overflow = 1;
 	    }
 
-	    current_column += len;
+	    current_column += col_len;
 #ifdef ANSI_COLOR
             current_column -= ansi_len;
             ansi_len = 0;
 #endif
-	    for (; len > 0; len--)
-		*bp++ = *cp++;
+            memcpy(bp, cp, len);
+            bp += len;
+            cp += len;
 	}
 
 	ip->current_column = current_column;
 
 	*bp = '\0';
+#ifdef USE_UTF8
+	if (overflow && !g_utf8_validate(buf, -1, NULL)) {
+            // Fix split chars.
+            gchar *valid = g_utf8_make_valid(buf, -1);
+            memcpy(buf, valid, strlen(valid) + 1);
+            g_free(valid);
+	}
+#endif
 	telnet_overflow |= telnet_output(ip->tp, (u_char *)buf);
 
 	if (overflow && !telnet_overflow)
