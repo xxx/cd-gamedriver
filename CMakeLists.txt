@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.14.0)
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 project (cd-gamedriver)
 
 find_package(BISON REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(JSONC REQUIRED json-c)
-pkg_check_modules(PCRE2 libpcre2-8)
+pkg_check_modules(
+    deps
+    REQUIRED IMPORTED_TARGET json-c
+    IMPORTED_TARGET libpcre2-8
+    IMPORTED_TARGET glib-2.0
+)
 
 # Set these to whatever is correct for you.
 set(MUD_LIB /edge/sanitys_edge/mud/lib)
@@ -88,16 +92,9 @@ add_custom_command(
 #
 
 add_executable(driver ${CSRC} ${ISRC} efun_table.h master.h)
-target_link_libraries(driver ${JSONC_LIBRARIES} ${PCRE2_LIBRARIES} crypt m)
-target_include_directories(
-    driver
-    PUBLIC ${JSONC_INCLUDE_DIRS}
-    PUBLIC ${PCRE2_INCLUDE_DIRS}
-)
+target_link_libraries(driver PkgConfig::deps crypt m)
 target_compile_options(
     driver
-    PUBLIC ${JSONC_CFLAGS_OTHER}
-    PUBLIC ${PCRE2_CFLAGS_OTHER}
     PRIVATE -pipe -O3 -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
 )
 
