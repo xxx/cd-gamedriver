@@ -2,10 +2,8 @@
 #include <string.h>
 #include <signal.h>
 #include <ctype.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <sys/times.h>
 #include <math.h>
 #include <memory.h>
 #include <unistd.h>

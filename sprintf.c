@@ -52,11 +52,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <sys/types.h>
 
 #include "config.h"
 #include "lint.h"
-#include "stdio.h"
 #include "interpret.h"
 #include "mapping.h"
 #include "object.h"

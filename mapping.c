@@ -1,13 +1,6 @@
 /* vim: set ts=8 : */
-#include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-#include <sys/time.h>
-#include <sys/types.h>		/* sys/types.h and netinet/in.h are here to enable include of comm.h below */
-#include <sys/stat.h>
-/* #include <netinet/in.h> Included in comm.h below */
 #include <memory.h>
-#include <stdio.h>
 
 #include "config.h"
 #include "lint.h"

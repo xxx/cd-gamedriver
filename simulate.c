@@ -15,7 +15,6 @@
 #include "config.h"
 #include "lint.h"
 #include "mstring.h"
-#include "stdio.h"
 #include "interpret.h"
 #include "object.h"
 #include "mapping.h"

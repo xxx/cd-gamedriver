@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include "config.h"
 #include "lint.h"
 #include "mstring.h"
 #include "interpret.h"

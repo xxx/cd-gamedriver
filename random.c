@@ -1,14 +1,9 @@
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/time.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <sys/time.h>
-#include <limits.h>
 #include <unistd.h>
 
 #include "random.h"
-#include "config.h"
 
 /* This file handles everything concerning the PRNG,
  * Currently it is JKISS by David Jones */

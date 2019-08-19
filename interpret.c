@@ -4,9 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
-#include <sys/types.h>		/* sys/types.h and netinet/in.h are here to enable include of comm.h below */
 #include <sys/stat.h>
-/* #include <netinet/in.h> Included in comm.h below */
 #include <memory.h>
 #include <limits.h>
 #include <math.h>

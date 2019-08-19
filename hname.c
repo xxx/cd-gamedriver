@@ -32,13 +32,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <signal.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
-#include "config.h"
 #include "lint.h"
 #include "net.h"
 #include "nqueue.h"

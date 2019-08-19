@@ -29,20 +29,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include "config.h"
-#include "lint.h"
 #include "main.h"
-#include "interpret.h"
 #include "simulate.h"
-#include "ndesc.h"
-#include "nqueue.h"
 #include "net.h"
 #include "backend.h"
 

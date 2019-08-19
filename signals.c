@@ -3,7 +3,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "config.h"
 #include "lint.h"
 #include "interpret.h"
 #include "backend.h"

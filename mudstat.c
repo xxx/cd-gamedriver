@@ -3,15 +3,11 @@
  *
  * Keep hundreth of a second statistics 
  */
-#include <sys/types.h>
-#include <sys/time.h>
 #include <sys/times.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "config.h"
-#include "lint.h"
 
 #define MUDSTAT
 #include "mudstat.h"

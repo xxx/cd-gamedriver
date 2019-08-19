@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <string.h>
 #include "lint.h"
 #include "interface.h"

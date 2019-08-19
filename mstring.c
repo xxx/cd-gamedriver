@@ -34,7 +34,6 @@
 #include <string.h>
 #include <limits.h>
 #include <math.h>
-#include <sys/types.h>
 
 #include "config.h"
 #include "lint.h"

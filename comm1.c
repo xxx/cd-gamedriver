@@ -1,18 +1,10 @@
 #include <sys/types.h>
-#include <sys/time.h>
-#include <sys/ioctl.h>
-#include <sys/file.h>
-#include <fcntl.h>
 #include <stdarg.h>
-#include <arpa/telnet.h>
 #include <netdb.h>
 #include <stdio.h>
-#include <errno.h>
 #include <string.h>
-#include <ctype.h>
 #include <signal.h>
 #include <memory.h>
-#include <fcntl.h>
 #include <stdlib.h>
 
 #include "config.h"
@@ -29,7 +21,6 @@
 #include "nqueue.h"
 #include "telnet.h"
 #include "tcpsvc.h"
-#include "udpsvc.h"
 #include "main.h"
 #include "backend.h"
 #include "mapping.h"

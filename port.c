@@ -1,16 +1,7 @@
-#include <stdio.h>
-#include <sys/types.h>
 #include <sys/time.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include <time.h>
-#include <sys/time.h>
-#include <math.h>
-#include <limits.h>
 
 #include "random.h"
-#include "config.h"
-#include "lint.h"
 
 double current_time;
 double alarm_time;

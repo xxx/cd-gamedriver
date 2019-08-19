@@ -1,19 +1,12 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <limits.h>
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <signal.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include <locale.h>
 
-#include "memory.h"
 #include "config.h"
 #include "lint.h"
 #include "interpret.h"

@@ -31,19 +31,13 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 
-#include "config.h"
 #include "simulate.h"
-#include "lint.h"
-#include "nqueue.h"
 
 #ifndef IPTOS_LOWDELAY
 #define	IPTOS_LOWDELAY	0x10

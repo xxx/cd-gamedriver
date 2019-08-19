@@ -4,7 +4,6 @@
  * as it is not used in any way whatsoever for monetary gain. */
 
 #include <memory.h>
-#include <signal.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>

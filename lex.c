@@ -4,14 +4,11 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <math.h>
-#include <float.h>
 
 #include "config.h"
 #include "instrs.h"
 #include "lint.h"
 #include "lang.h"
-#include "string.h"
 #include "interpret.h"
 #include "exec.h"
 #include "lex.h"

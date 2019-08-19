@@ -42,7 +42,6 @@ int	version = 6;	/* used only in the "set" function, for i.d. */
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
-#include <sys/types.h>  /* need for netinet */
 #include <ctype.h>
 /* Regexp is Henry Spencer's package. WARNING: regsub is modified to return
  * a pointer to the \0 after the destination string, and this program refers

@@ -3,7 +3,6 @@
 
 #include "config.h"
 #include "lint.h"
-#include "interpret.h"
 #include "object.h"
 #include "hash.h"
 #include "simulate.h"
