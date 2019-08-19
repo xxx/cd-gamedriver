@@ -6,6 +6,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "config.h"
 #include "pcre.h"
 #include "lint.h"
 #include "interpret.h"
@@ -24,8 +25,12 @@ pcre_compile(const char *pat, char *error_buffer)
     re = pcre2_compile(
         pattern,               /* the pattern */
         PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
-        0,                     /* default options */
-        &error_number,          /* for error number */
+#ifdef USE_UTF8
+        PCRE2_UTF,             /* default options */
+#else
+        0,
+#endif
+        &error_number,         /* for error number */
         &error_offset,         /* for error offset */
         NULL);                 /* use default compile context */
 
