@@ -119,10 +119,6 @@ add_executable(make_func make_func.c)
 
 # Utils
 add_executable(hname util/hname.c)
-set_target_properties(
-    hname
-    PROPERTIES EXCLUDE_FROM_ALL TRUE
-)
 add_custom_command(
     OUTPUT restart_mud
     DEPENDS util/restart_mud.sh
