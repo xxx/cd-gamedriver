@@ -130,12 +130,10 @@ add_custom_command(
     VERBATIM
 )
 install(TARGETS hname
-    EXCLUDE_FROM_ALL
     CONFIGURATIONS Debug Release
     RUNTIME DESTINATION ${BINDIR}
 )
 install(PROGRAMS restart_mud
-    EXCLUDE_FROM_ALL
     CONFIGURATIONS Debug Release
     RUNTIME DESTINATION ${BINDIR}
 )
