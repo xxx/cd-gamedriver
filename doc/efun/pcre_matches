@@ -12,6 +12,8 @@ DESCRIPTION
 
     This function is not defined unless HAVE_PCRE is defined at build time.
 
+    If USE_UTF8 is defined, this will treat strings as UTF-8.
+
 SEE ALSO
     pcre_filter, pcre_capture
 

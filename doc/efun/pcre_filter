@@ -16,6 +16,8 @@ DESCRIPTION
 
     This function is not defined unless HAVE_PCRE is defined at build time.
 
+    If USE_UTF8 is defined, this will treat strings as UTF-8.
+
 NOTES
     Using this function is preferred over something like
     filter(strs, &pcre_matches(,pattern)), as this function compiles the regexp

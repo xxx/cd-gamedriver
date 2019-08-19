@@ -14,6 +14,8 @@ DESCRIPTION
 
     This function is not defined unless HAVE_PCRE is defined at build time.
 
+    If USE_UTF8 is defined, this will treat strings as UTF-8.
+
 EXAMPLE
     string regexp = "(?i)(The ((?:kinda )?quick) brown) fox";
     string str = "the kinda quick brown fox jumped over the lazy dog.";
