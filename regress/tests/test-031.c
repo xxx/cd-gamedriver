@@ -38,9 +38,17 @@ test_break_string()
 }
 
 void
+test_explode()
+{
+    dump_array(explode("😈😈 😈😈 😈😈 😈😈 😈😈", " "));
+    dump_array(explode("😈😈 😈😈 😈😈 😈😈 😈😈", ""));
+}
+
+void
 create()
 {
     test_readable_string();
     test_strlen();
     test_break_string();
+    test_explode();
 }

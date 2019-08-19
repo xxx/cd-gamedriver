@@ -41,7 +41,6 @@
 #endif
 
 #ifdef USE_UTF8
-#include <glib.h>
 #include "utf8.h"
 #endif
 

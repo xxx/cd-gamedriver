@@ -34,7 +34,6 @@
 
 #ifdef USE_UTF8
 #include "utf8.h"
-#include <glib.h>
 #endif
 
 extern int d_flag; /* for debugging purposes */

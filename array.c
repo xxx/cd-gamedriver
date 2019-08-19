@@ -1,6 +1,4 @@
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "config.h"
 #include "lint.h"
@@ -17,6 +15,10 @@
 
 #include "inline_eqs.h"
 #include "inline_svalue.h"
+
+#ifdef USE_UTF8
+#include "utf8.h"
+#endif
 
 extern struct svalue *sp;
 
@@ -129,11 +131,29 @@ explode_string(char *str, char *del)
     len = strlen(del);
     /*
      * Take care of the case where the delimiter is an
-     * empty string. Then, return an array with only one element,
-     * which is the original string.
+     * empty string. Then, return an array of strings, where
+     * each item is a character.
      */
     if (len == 0)
     {
+#ifdef USE_UTF8
+        /* Return each unicode char, rather than just splitting on bytes */
+        len = g_utf8_strlen(str, -1);
+        ret = allocate_array((int)len);
+        gchar *iter = str;
+        for (num = 0; num < len; num++)
+        {
+            gunichar uc = g_utf8_get_char(iter);
+            int uc_len = UTF8_LENGTH(uc);
+
+            ret->item[num].type = T_STRING;
+            ret->item[num].string_type = STRING_MSTRING;
+            ret->item[num].u.string = allocate_mstring(uc_len);
+            memcpy(ret->item[num].u.string, iter, uc_len);
+            ret->item[num].u.string[uc_len] = '\0';
+            iter += uc_len;
+        }
+#else
 	len = strlen(str); 
 	ret = allocate_array((int)len);
 	for (num = 0; num < len; num++)
@@ -144,6 +164,7 @@ explode_string(char *str, char *del)
 	    ret->item[num].u.string[0] = str[num];
 	    ret->item[num].u.string[1] = '\0';
 	}
+#endif
 	return ret;
     }
 

@@ -1,5 +1,12 @@
+/*
+ * utf8.h
+ *
+ * Helpers for UTF-8 string handling
+ */
 #ifndef UTF8_H_
 #define UTF8_H_
+
+#include <glib.h>
 
 #define UTF8_LENGTH(Char)              \
   ((Char) < 0x80 ? 1 :                 \
