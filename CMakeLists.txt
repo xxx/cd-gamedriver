@@ -130,6 +130,7 @@ install(TARGETS hname
     RUNTIME DESTINATION ${BINDIR}
 )
 install(PROGRAMS restart_mud
+    EXCLUDE_FROM_ALL
     CONFIGURATIONS Debug Release
     RUNTIME DESTINATION ${BINDIR}
 )
