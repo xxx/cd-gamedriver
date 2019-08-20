@@ -1174,9 +1174,6 @@ extern struct vector *subtract_array (struct vector *,struct vector*);
 extern struct vector *intersect_array (struct vector *, struct vector *);
 extern struct vector *union_array (struct vector *, struct vector *);
 extern struct svalue *debug_command (char *, int, struct svalue *);
-extern struct vector *subtract_array (struct vector*,struct vector*);
-extern struct vector *intersect_array (struct vector*,struct vector*);
-extern struct vector *make_unique (struct vector *arr, struct closure *fun, struct svalue *skipnum);
 static void eval_instruction(char *);
 
 

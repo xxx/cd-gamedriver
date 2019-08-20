@@ -15,6 +15,7 @@ test_readable_string()
 {
     write(readable_string("hello\n") + "\n");
     write(readable_string("hello\né😈☻") + "\n");
+    write(readable_string(sprintf("hello :: %c%c%c\n", 231, 213, 111)) + "\n");
 }
 
 void
