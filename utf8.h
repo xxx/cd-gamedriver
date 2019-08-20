@@ -15,4 +15,6 @@
      ((Char) < 0x200000 ? 4 :          \
       ((Char) < 0x4000000 ? 5 : 6)))))
 
+#define UTF8_COL_WIDTH(Char) (g_unichar_iswide(Char) ? 2 : 1)
+
 #endif

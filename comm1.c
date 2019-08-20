@@ -227,7 +227,7 @@ write_socket(char *cp, struct object *ob)
 #endif
 #ifdef USE_UTF8
     // the len declared above is still the number of bytes.
-    int col_len = 0; // length of displayed columns. Some chars use 2 cols.
+    int col_width = 0; // width of displayed columns. Some chars use 2 cols.
 #endif
 #endif
 
@@ -333,7 +333,7 @@ write_socket(char *cp, struct object *ob)
 #endif
 	    len = 1; // include the null byte
 #ifdef USE_UTF8
-            col_len = 1;
+            col_width = 1;
             char *utf_iter = cp + 1; // + 1 for null byte
             gunichar prev_char = g_utf8_get_char(cp);
             gunichar uc = g_utf8_get_char(utf_iter);
@@ -357,7 +357,7 @@ write_socket(char *cp, struct object *ob)
 #endif
 #ifdef USE_UTF8
                 len += UTF8_LENGTH(uc);
-                col_len += (g_unichar_iswide(uc) ? 2 : 1);
+                col_width += UTF8_COL_WIDTH(uc);
                 utf_iter = g_utf8_next_char(utf_iter);
                 prev_char = uc;
                 uc = g_utf8_get_char(utf_iter);
@@ -369,13 +369,13 @@ write_socket(char *cp, struct object *ob)
 // Just want to keep this sane since we're juggling 2 optional defines here
 // Let the optimizer figure the rest out.
 #ifndef USE_UTF8
-            int col_len = len;
+            int col_width = len;
 #endif
 
 #ifdef ANSI_COLOR
-            int new_len = col_len - ansi_len;
+            int new_len = col_width - ansi_len;
 #else
-            int new_len = col_len;
+            int new_len = col_width;
 #endif
             if (current_column + new_len >= ip->screen_width)
 	    {
@@ -408,7 +408,7 @@ write_socket(char *cp, struct object *ob)
 	        overflow = 1;
 	    }
 
-	    current_column += col_len;
+	    current_column += col_width;
 #ifdef ANSI_COLOR
             current_column -= ansi_len;
             ansi_len = 0;
