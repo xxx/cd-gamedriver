@@ -6012,15 +6012,15 @@ f_readable_string(int num_arg)
 
     char *str;
 #ifdef USE_UTF8
-    gchar *out = g_locale_to_utf8(sp->u.string, -1, NULL, NULL, NULL);
-
-    if (!g_utf8_validate(out, -1, NULL)) {
-        gchar *invalid = out;
-        out = g_utf8_make_valid(invalid, -1);
-        g_free(invalid);
+    if (g_utf8_validate(sp->u.string, -1, NULL)) {
+        str = make_mstring(sp->u.string);
+    } else {
+        gchar *valid = g_utf8_make_valid(sp->u.string, -1);
+        str = make_mstring(valid);
+        g_free(valid);
     }
 
-    gchar *iter = out;
+    gchar *iter = str;
 
     while (*iter) {
         gunichar uc = g_utf8_get_char(iter);
@@ -6040,7 +6040,6 @@ f_readable_string(int num_arg)
      * we this will be going to the game.
      */
 
-    str = (char *)out;
 #else
     int  i, c;
     str = make_mstring(sp->u.string);
