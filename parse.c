@@ -2123,11 +2123,8 @@ break_string(char *str, int width, struct svalue *indent)
 #endif
     	}
 #ifdef USE_UTF8
-    	else
-        {
-            gunichar gu = g_utf8_get_char(&fstr[il]);
-            col_width += UTF8_COL_WIDTH(gu);
-        }
+        gunichar gu = g_utf8_get_char(&fstr[il]);
+        col_width += UTF8_COL_WIDTH(gu);
 #endif
     }
 
