@@ -557,6 +557,9 @@ telnet_get_optp(telnet_t *tp, u_char opt)
         case TELOPT_MSSP:
             return &tp->t_optb[OP_MSSP];
 
+        case TELOPT_CHARSET:
+            return &tp->t_optb[OP_UTF8];
+
         default:
             return NULL;
     }

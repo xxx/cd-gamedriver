@@ -61,8 +61,8 @@ typedef struct {
 #define	OP_CDM			2
 #define OP_GMCP         3 
 #define OP_MSSP         4
-#define OP_SIZE         5
-#define OP_UTF8         6
+#define OP_UTF8         5
+#define OP_SIZE         6
 
 /*
  * Telnet Control Block.
