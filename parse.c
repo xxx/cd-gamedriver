@@ -2068,6 +2068,8 @@ break_string(char *str, int width, struct svalue *indent)
     int in_ansi = 0;
 #endif
 #ifdef USE_UTF8
+    int col_width = 0;
+    int col_width_at_space = 0;
     for(il = 0; il < l; il += UTF8_LENGTH(g_utf8_get_char(&fstr[il])))
 #else
     for (il = 0; il < l; il++)
@@ -2087,22 +2089,46 @@ break_string(char *str, int width, struct svalue *indent)
             ansi_len++;
 #endif
 	if (fstr[il] == ' ')
-	    space = il;
+    {
+        space = il;
+#ifdef USE_UTF8
+        col_width_at_space = col_width;
+#endif
+    }
+#ifdef USE_UTF8
+#ifdef ANSI_COLOR
+        if ((col_width - ansi_len) >= (width - indlen) && space >= 0)
+#else // ANSI_COLOR
+            if (col_width >= (width - indlen) && space >= 0)
+#endif // ANSI_COLOR
+#else // USE_UTF8
 #ifdef ANSI_COLOR
         if ((il - nchar - ansi_len) >= (width - indlen) && space >= 0)
-#else
+#else // ANSI_COLOR
         if ((il - nchar) >= (width - indlen) && space >= 0)
-#endif
-	{
+#endif // ANSI_COLOR
+#endif // USE_UTF8
+        {
             if (fstr == str)
                 fstr = make_mstring(str);
-	    fstr[space] = '\n';
-	    nchar = space + 1;
-	    space = -1;
-#ifdef ANSI_COLOR
-	    ansi_len = 0;
+            fstr[space] = '\n';
+            nchar = space + 1;
+            space = -1;
+#ifdef USE_UTF8
+            col_width -= col_width_at_space;
+            col_width_at_space = 0;
 #endif
-	}
+#ifdef ANSI_COLOR
+    	    ansi_len = 0;
+#endif
+    	}
+#ifdef USE_UTF8
+    	else
+        {
+            gunichar gu = g_utf8_get_char(&fstr[il]);
+            col_width += UTF8_COL_WIDTH(gu);
+        }
+#endif
     }
 
     /*
