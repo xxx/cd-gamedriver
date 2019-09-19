@@ -12,7 +12,7 @@ pkg_check_modules(
     deps
     REQUIRED IMPORTED_TARGET json-c
     IMPORTED_TARGET libpcre2-8
-    IMPORTED_TARGET glib-2.0
+    IMPORTED_TARGET glib-2.0>=2.52
 )
 
 if(NOT CMAKE_BUILD_TYPE)
