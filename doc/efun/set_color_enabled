@@ -1,0 +1,11 @@
+NAME
+	set_color_enabled - set whether the user wants colored text or not
+	
+SYNOPSIS
+	void set_color_enabled(int)
+
+DESCRIPTION
+	If the parameter is 1, color is enabled. If 0, color is disabled.
+
+SEE ALSO
+	query_color_enabled

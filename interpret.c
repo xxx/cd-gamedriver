@@ -5858,6 +5858,32 @@ f_strip_color(int xxx)
     pop_stack();
     push_mstring(str);
 }
+
+/* ARGSUSED */
+static void
+f_set_color_enabled(int num_arg)
+{
+    unsigned enabled;
+
+    if (!current_object->interactive)
+        return;
+    enabled = sp->u.number ? 1 : 0;
+    if (enabled < 0 || enabled > 100) // 100 is just arbitrary here
+        error("Nonsensical color-enabled value\n");
+    current_object->interactive->color_enabled = enabled;
+
+    /* Return first argument */
+}
+
+/* ARGSUSED */
+static void
+f_query_color_enabled(int num_arg)
+{
+    int i = 0;
+    if (current_object->interactive)
+        i = current_object->interactive->color_enabled;
+    push_number(i);
+}
 #endif
 
 /* ARGSUSED */

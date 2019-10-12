@@ -157,6 +157,8 @@ int	strlen(int|string);
 #ifdef ANSI_COLOR
 int	strlen_printable(int|string);
 int	strip_color(int|string);
+int     set_color_enabled(int);
+int     query_color_enabled();
 #endif
 void	tail(string);
 float	tan(float);

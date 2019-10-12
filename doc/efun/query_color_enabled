@@ -1,0 +1,11 @@
+NAME
+	query_color_enabled - query whether the user wants colored text or not
+	
+SYNOPSIS
+	int query_color_enabled()
+
+DESCRIPTION
+	Return 1 if enabled, 0 if disabled
+
+SEE ALSO
+	set_color_enabled

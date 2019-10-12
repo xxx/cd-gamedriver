@@ -34,6 +34,9 @@ struct interactive {
     unsigned screen_width;   /* If 0, no wordwrap */
     unsigned current_column; /* Where the cursor should be */
 #endif
+#ifdef ANSI_COLOR
+    unsigned color_enabled; /* Translate pinkfish codes when sending text? */
+#endif
 
 };
 

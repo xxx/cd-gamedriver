@@ -605,6 +605,9 @@ new_player(void *tp, struct sockaddr_storage *addr, socklen_t len, u_short local
 	master_ob->interactive->current_column = 0;
 	master_ob->interactive->screen_width = 0;
 #endif
+#ifdef ANSI_COLOR
+	master_ob->interactive->color_enabled = 1;
+#endif
 	all_players[i] = master_ob->interactive;
 	all_players[i]->tp = tp;
 	set_prompt(NULL);
