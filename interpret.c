@@ -5887,9 +5887,72 @@ f_query_color_enabled(int num_arg)
 
 /* ARGSUSED */
 static void
+f_set_theme(int num_arg)
+{
+    int color;
+
+    if (!current_object->interactive) {
+        pop_n_elems(5);
+        push_number(0);
+        return;
+    }
+
+    color = sp->u.number;
+    if (color < 0 || color > 255)
+        error("Color value out of range: %d\n", color);
+    current_object->interactive->theme_vdark = color;
+
+    color = (sp-1)->u.number;
+    if (color < 0 || color > 255)
+        error("Color value out of range: %d\n", color);
+    current_object->interactive->theme_dark = color;
+
+    color = (sp-2)->u.number;
+    if (color < 0 || color > 255)
+        error("Color value out of range: %d\n", color);
+    current_object->interactive->theme_norm = color;
+
+    color = (sp-3)->u.number;
+    if (color < 0 || color > 255)
+        error("Color value out of range: %d\n", color);
+    current_object->interactive->theme_light = color;
+
+    color = (sp-4)->u.number;
+    if (color < 0 || color > 255)
+        error("Color value out of range: %d\n", color);
+    current_object->interactive->theme_high = color;
+
+    pop_n_elems(5);
+    push_number(0);
+}
+
+/* ARGSUSED */
+static void
+f_query_theme(int num_arg)
+{
+    if (!current_object->interactive) {
+        push_number(0);
+        return;
+    }
+
+    struct vector *v = allocate_array(5);
+    v->item[0].type = T_NUMBER;
+    v->item[0].u.number = current_object->interactive->theme_high;
+    v->item[1].type = T_NUMBER;
+    v->item[1].u.number = current_object->interactive->theme_light;
+    v->item[2].type = T_NUMBER;
+    v->item[2].u.number = current_object->interactive->theme_norm;
+    v->item[3].type = T_NUMBER;
+    v->item[3].u.number = current_object->interactive->theme_dark;
+    v->item[4].type = T_NUMBER;
+    v->item[4].u.number = current_object->interactive->theme_vdark;
+    push_vector(v, FALSE);
+}
+
+/* ARGSUSED */
+static void
 f_terminal_colour(int num_arg)
 {
-    struct svalue *arg = sp - num_arg + 1;
     char *str;
 
     if ((sp-1)->type == T_STRING)

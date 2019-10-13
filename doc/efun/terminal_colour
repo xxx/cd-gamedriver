@@ -64,6 +64,13 @@ DESCRIPTION
             REVERSE
             UNDERLINE
 
+        Theme-specific codes (set via set_theme()):
+            T_HIGH
+            T_LIGHT
+            T_NORM
+            T_DARK
+            T_VDARK
+
         Additionally, a few other codes are supported, but do nothing, to
           ease in porting:
             INITTERM
@@ -81,7 +88,7 @@ NOTES
     work with every client.
 
 SEE ALSO
-	set_color_enabled, query_color_enabled
+	set_color_enabled, query_color_enabled, set_theme, query_theme
 
 
 

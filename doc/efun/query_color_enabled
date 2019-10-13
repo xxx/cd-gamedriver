@@ -7,5 +7,7 @@ SYNOPSIS
 DESCRIPTION
 	Return 1 if enabled, 0 if disabled
 
+    This efun is only defined if ANSI_COLOR was defined at compile time.
+
 SEE ALSO
-	set_color_enabled, terminal_colour
+	set_color_enabled, terminal_colour, set_theme, query_theme

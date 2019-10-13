@@ -1,0 +1,15 @@
+NAME
+	query_theme - query the current interactive's theme settings
+	
+SYNOPSIS
+	int *query_theme()
+
+DESCRIPTION
+    Return the 5-element array of ints, corresponding to
+    ({ highlight, light, normal, dark, very dark })
+    theme colors, set via set_theme
+
+    This efun is only defined if ANSI_COLOR was defined at compile time.
+
+SEE ALSO
+	set_color_enabled, query_color_enabled, terminal_colour, set_theme

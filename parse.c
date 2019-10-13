@@ -2065,7 +2065,8 @@ break_string(char *str, int width, struct svalue *indent)
     fstr = str;
 #ifdef ANSI_COLOR
     int ansi_len = 0;
-    int in_ansi = 0;
+    _Bool in_ansi = 0;
+    _Bool in_pinkfish = 0;
 #endif
 #ifdef USE_UTF8
     int col_width = 0;
@@ -2076,16 +2077,24 @@ break_string(char *str, int width, struct svalue *indent)
 #endif
     {
 #ifdef ANSI_COLOR
-        if (!in_ansi && fstr[il] == ANSI_START)
+        if (!in_ansi && fstr[il] == ANSI_START) {
             in_ansi = 1;
-
-        if (in_ansi && fstr[il] == ANSI_END)
-        {
+        } else if (in_ansi && fstr[il] == ANSI_END) {
             ansi_len++;
             in_ansi = 0;
+        } else if (!in_pinkfish && (
+            (il == 1 && fstr[il] == PINKFISH_SECOND && fstr[il-1] == PINKFISH_FIRST) ||
+            (il > 1 && fstr[il] == PINKFISH_SECOND && fstr[il-1] == PINKFISH_FIRST &&
+                fstr[il-2] != PINKFISH_FIRST))) {
+            in_pinkfish = 1;
+            ansi_len++; // count the '%'
+        } else if (in_pinkfish && fstr[il] == PINKFISH_SECOND &&
+            fstr[il-1] == PINKFISH_FIRST) {
+            ansi_len++;
+            in_pinkfish = 0;
         }
 
-        if (in_ansi)
+        if (in_ansi || in_pinkfish)
             ansi_len++;
 #endif
 	if (fstr[il] == ' ')

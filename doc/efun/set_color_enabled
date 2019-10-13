@@ -7,5 +7,7 @@ SYNOPSIS
 DESCRIPTION
 	If the parameter is 1, color is enabled. If 0, color is disabled.
 
+    This efun is only defined if ANSI_COLOR was defined at compile time.
+
 SEE ALSO
-	query_color_enabled, terminal_colour
+	query_color_enabled, terminal_colour, set_theme, query_theme

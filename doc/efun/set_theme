@@ -1,0 +1,27 @@
+NAME
+	set_theme - set the user's preferred text theme colors
+	
+SYNOPSIS
+	int set_theme(int highlight, int light, int normal, int dark, int very_dark)
+
+DESCRIPTION
+	Set the current interactive's theme's five colors (values between
+    0 and 255, inclusive). This function exists so the theme-related
+    pinkfish codes can be used.
+
+    This function always returns 0. It will throw an error if any of the
+    values are outside of the 0-255 range.
+
+    By default, themes are set
+
+	How these codes are used in-game is up to the wizard, but the
+	intended/initial use cases are highlighted byt he choice of
+	arguments names above.
+
+	These colors correspond respectively to T_HIGH, T_LIGHT, T_NORM,
+	T_DARK, and T_VDARK pinkfish codes.
+
+    This efun is only defined if ANSI_COLOR was defined at compile time.
+
+SEE ALSO
+	set_color_enabled, query_color_enabled, terminal_colour, query_theme

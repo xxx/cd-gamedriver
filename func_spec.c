@@ -159,6 +159,8 @@ int	strlen_printable(int|string);
 int	strip_color(int|string);
 int     set_color_enabled(int);
 int     query_color_enabled();
+int     set_theme(int, int, int, int, int);
+int     *query_theme();
 string  terminal_colour(string, int default: F_CONST1);
 #endif
 void	tail(string);
