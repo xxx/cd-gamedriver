@@ -129,8 +129,13 @@ strip_color(char *chr)
  *
  * The caller needs to free() the result of this function.
  *
- * if strip_only is true, we only remove the pinkfish codes from the
- * input, without replacing them with anything.
+ * If color_enabled is true, we replace the codes with whatever is set up for
+ * them in the table. If false, the codes are removed, but not replaced with
+ * anything.
+ *
+ * inter is a pointer to the interactive that we want to get the theme-related
+ * code replacements from. Can be NULL, in which case theme-related codes will
+ * just be removed as any other unknown token would be.
  */
 char *
 substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *inter)
