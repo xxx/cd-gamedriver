@@ -14,7 +14,7 @@ void
 test_terminal_colour()
 {
     string str = "\n\n%^FG_130%^%^B_ORANGE%^%^BOLD%^%^UNDERLINE%^%^FLASH%^hello%^RESET%^\n";
-    string colored = terminal_colour(str);
+    string colored = terminal_colour(str, 0);
     write(colored + "\n");
     write(strlen(str) + " " + strlen_printable(str) + "\n");
     write(strlen(colored) + " " + strlen_printable(colored) + "\n");
@@ -24,8 +24,9 @@ test_terminal_colour()
     // that %%^ is an escaped version of the sequence, and not counted
     write(terminal_colour("%%^RED%%^") + "\n");
     write(terminal_colour("%^BLACK%^HELLO FRIENDS%^RESET%") + "\n");
-    write(terminal_colour("%^BLUE%%^DAWGZ%^%^WHITE%^taccos%^RESET%^") + "\n");
+    write(terminal_colour("%^BLUE%%^DAWGZ%^%^WHITE%^taccos%^RESET%^", 0) + "\n");
     write((terminal_colour("%%^RED%%^") == "%^RED%^") + "\n");
+    write("^%ORANGE^%DIRECT WRITE COLOR%^RESET%^");
 
     write(terminal_colour("%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^\n"));
     write(terminal_colour("%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^%^\n"));

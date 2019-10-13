@@ -248,6 +248,11 @@ write_socket(char *cp, struct object *ob)
     if (ip->snoop_by != NULL)
 	add_message2(ip->snoop_by->ob, "%%%s", cp);
 
+#ifdef ANSI_COLOR
+    char *colored = substitute_pinkfish(cp, ob->interactive->color_enabled);
+    cp = colored;
+#endif
+
 #ifdef WORD_WRAP
     if (ip->screen_width != 0)
     {
@@ -440,6 +445,10 @@ write_socket(char *cp, struct object *ob)
 	telnet_output(ip->tp, (u_char *)cp);
 	/* No test on overflow. Let the telnet buffer handle it. */
     }
+
+#ifdef ANSI_COLOR
+    free(colored);
+#endif
 }
 
 #define MSR_SIZE 20

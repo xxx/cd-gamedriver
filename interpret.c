@@ -5889,18 +5889,18 @@ f_query_color_enabled(int num_arg)
 static void
 f_terminal_colour(int num_arg)
 {
-    struct svalue *arg = sp- num_arg + 1;
+    struct svalue *arg = sp - num_arg + 1;
     char *str;
 
-    if (arg[0].type == T_STRING)
+    if ((sp-1)->type == T_STRING)
     {
-        str = substitute_pinkfish(arg[0].u.string, 0);
+        str = substitute_pinkfish((sp-1)->u.string, sp->u.number);
 
         char *m_str = make_mstring(str);
         free(str);
 
         if (m_str) {
-            pop_stack();
+            pop_n_elems(num_arg);
             push_mstring(m_str);
         }
     }

@@ -159,7 +159,7 @@ int	strlen_printable(int|string);
 int	strip_color(int|string);
 int     set_color_enabled(int);
 int     query_color_enabled();
-string  terminal_colour(string);
+string  terminal_colour(string, int default: F_CONST1);
 #endif
 void	tail(string);
 float	tan(float);

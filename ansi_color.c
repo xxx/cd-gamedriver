@@ -109,7 +109,7 @@ strip_color(char *chr)
  * input, without replacing them with anything.
  */
 char *
-substitute_pinkfish(const char *chr, _Bool strip_only)
+substitute_pinkfish(const char *chr, _Bool color_enabled)
 {
     const char *const delim = "%^";
 
@@ -146,7 +146,7 @@ substitute_pinkfish(const char *chr, _Bool strip_only)
         } else {
             in_code = 0;
 
-            if (!strip_only) {
+            if (color_enabled) {
                 const struct pinkfish_code *code;
 
                 code = pinkfish_lookup(code_start, token - code_start);
