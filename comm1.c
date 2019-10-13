@@ -235,10 +235,12 @@ write_socket(char *cp, struct object *ob)
 	(ip = ob->interactive) == NULL ||
 	ip->do_close)
     {
-        cp = substitute_pinkfish(cp, 1);
+        cp = substitute_pinkfish(cp, 1, NULL);
 	(void)fputs(cp, stderr);
 	(void)fflush(stderr);
-	free(cp);
+	if (*cp) {
+            free(cp);
+	}
 	return;
     }
 
@@ -251,7 +253,7 @@ write_socket(char *cp, struct object *ob)
 	add_message2(ip->snoop_by->ob, "%%%s", cp);
 
 #ifdef ANSI_COLOR
-    cp = substitute_pinkfish(cp, ip->color_enabled);
+    cp = substitute_pinkfish(cp, ip->color_enabled, ip);
 #endif
 
 #ifdef WORD_WRAP
@@ -448,7 +450,8 @@ write_socket(char *cp, struct object *ob)
     }
 
 #ifdef ANSI_COLOR
-    free(cp);
+    if (*cp)
+        free(cp);
 #endif
 }
 
@@ -617,6 +620,11 @@ new_player(void *tp, struct sockaddr_storage *addr, socklen_t len, u_short local
 #endif
 #ifdef ANSI_COLOR
 	master_ob->interactive->color_enabled = 1;
+	master_ob->interactive->theme_high = -1;
+	master_ob->interactive->theme_light = -1;
+	master_ob->interactive->theme_norm = -1;
+	master_ob->interactive->theme_dark = -1;
+	master_ob->interactive->theme_vdark = -1;
 #endif
 	all_players[i] = master_ob->interactive;
 	all_players[i]->tp = tp;

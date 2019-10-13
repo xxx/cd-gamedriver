@@ -4,6 +4,8 @@
  * Additional support functions for ANSI colors.
  */
 #include <string.h>
+#include <stdio.h>
+#include <comm.h>
 #include "ansi_color.h"
 #include "config.h"
 #include "memory.h"
@@ -131,7 +133,7 @@ strip_color(char *chr)
  * input, without replacing them with anything.
  */
 char *
-substitute_pinkfish(const char *chr, _Bool color_enabled)
+substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *inter)
 {
     const char *const delim = PINKFISH_DELIMITER;
 
@@ -148,7 +150,6 @@ substitute_pinkfish(const char *chr, _Bool color_enabled)
 
     char *token;
     while((token = strstr(chr, delim))) {
-
         // handle escaped %'s, and turn %%^ into %^
         if (token > chr && *(token - 1) == PINKFISH_FIRST) {
                 if (!in_code) {
@@ -171,12 +172,37 @@ substitute_pinkfish(const char *chr, _Bool color_enabled)
             if (color_enabled) {
                 const struct pinkfish_code *code;
 
-                code = pinkfish_lookup(code_start, token - code_start);
+                int token_len = token - code_start;
+                code = pinkfish_lookup(code_start, token_len);
 
                 if (code) {
                     size_t len = strlen(code->ansi);
                     memcpy(result_ptr, code->ansi, len);
                     result_ptr += len;
+                } else if (inter && (token_len == 6 || token_len == 7)) {
+                    char theme_code[7]; // enough to hold FG_XXX + nul
+                    int code_len = 0;
+
+                    if (strncmp(code_start, "T_HIGH", token_len) == 0) {
+                        code_len = sprintf(theme_code, "FG_%d", inter->theme_high);
+                    } else if (strncmp(code_start, "T_LIGHT", token_len) == 0) {
+                        code_len = sprintf(theme_code, "FG_%d", inter->theme_light);
+                    } else if (strncmp(code_start, "T_NORM", token_len) == 0) {
+                        code_len = sprintf(theme_code, "FG_%d", inter->theme_norm);
+                    } else if (strncmp(code_start, "T_DARK", token_len) == 0) {
+                        code_len = sprintf(theme_code, "FG_%d", inter->theme_dark);
+                    } else if (strncmp(code_start, "T_VDARK", token_len) == 0) {
+                        code_len = sprintf(theme_code, "FG_%d", inter->theme_vdark);
+                    }
+
+                    if (code_len > 0) {
+                        code = pinkfish_lookup(theme_code, code_len);
+                        if (code) {
+                            size_t len = strlen(code->ansi);
+                            memcpy(result_ptr, code->ansi, len);
+                            result_ptr += len;
+                        }
+                    }
                 }
             }
 

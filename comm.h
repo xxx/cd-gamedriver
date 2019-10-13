@@ -36,6 +36,11 @@ struct interactive {
 #endif
 #ifdef ANSI_COLOR
     unsigned color_enabled; /* Translate pinkfish codes when sending text? */
+    int theme_high; /* theme highlight color */
+    int theme_light; /* theme light color */
+    int theme_norm; /* theme normal color */
+    int theme_dark; /* theme dark color */
+    int theme_vdark; /* theme very dark color */
 #endif
 
 };

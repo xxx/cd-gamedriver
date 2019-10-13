@@ -5894,7 +5894,11 @@ f_terminal_colour(int num_arg)
 
     if ((sp-1)->type == T_STRING)
     {
-        str = substitute_pinkfish((sp-1)->u.string, sp->u.number);
+        if (current_object->interactive) {
+            str = substitute_pinkfish((sp-1)->u.string, sp->u.number, current_object->interactive);
+        } else {
+            str = substitute_pinkfish((sp-1)->u.string, sp->u.number, NULL);
+        }
 
         char *m_str = make_mstring(str);
         free(str);
