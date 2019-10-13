@@ -12,45 +12,67 @@
 #include <glib.h>
 #endif
 
+#ifdef USE_UTF8
+/*
+ * valid sgr sequence characters are all ascii, so this is
+ * the only thing that needs updating, since we can get
+ * away with checking the first byte only.
+ */
+#define NEXT_CHAR(chr) g_utf8_next_char(chr)
+#else
+#define NEXT_CHAR(chr) ((chr) + 1)
+#endif
+
 int
 strlen_printable(char *chr)
 {
     int ansi_len = 0;
     int i = 0;
+    _Bool in_ansi = 0;
+    _Bool in_pinkfish = 0;
 
-    while (*chr)
-    {
+    while (*chr) {
         i++;
 
-        if (ansi_len > 0)
-        {
+        if (in_ansi) {
             /* end of sequence */
-            if ((*chr) == ANSI_END)
-            {
+            if ((*chr) == ANSI_END) {
                 /* subtract the length of just-finished sequence */
                 i -= ansi_len + 1;
                 ansi_len = 0;
-            }
-            else
-            {
+                in_ansi = 0;
+            } else {
                 ansi_len++;
             }
-        }
-        else if ((*chr) == ANSI_START)
-        {
+        } else if (in_pinkfish) {
+            if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND) {
+                // We skip both chars at once here
+
+                // only subject len + 1 because i was
+                // never incremented for '^'.
+                i -= ansi_len + 1;
+                ansi_len = 0;
+                in_pinkfish = 0;
+                chr = NEXT_CHAR(chr);
+            } else {
+                ansi_len++;
+            }
+        } else if ((*chr) == ANSI_START) {
+            in_ansi = 1;
             ansi_len++;
+        } else if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND) {
+            // We skip both chars at once here
+            in_pinkfish = 1;
+            ansi_len += 2;
+            i++;
+            chr = NEXT_CHAR(chr);
         }
 
-#ifdef USE_UTF8
-        /*
-         * valid sgr sequence characters are all ascii, so this is
-         * the only thing that needs updating, since we can get
-         * away with checking the first byte only.
-         */
-        chr = g_utf8_next_char(chr);
-#else
-        chr++;
-#endif
+        if (!chr) {
+            break;
+        }
+
+        chr = NEXT_CHAR(chr);
     }
 
     return i;
@@ -111,7 +133,7 @@ strip_color(char *chr)
 char *
 substitute_pinkfish(const char *chr, _Bool color_enabled)
 {
-    const char *const delim = "%^";
+    const char *const delim = PINKFISH_DELIMITER;
 
     /*
      * "big enough". In almost all cases the pinkfish code
@@ -128,7 +150,7 @@ substitute_pinkfish(const char *chr, _Bool color_enabled)
     while((token = strstr(chr, delim))) {
 
         // handle escaped %'s, and turn %%^ into %^
-        if (token > chr && *(token - 1) == '%') {
+        if (token > chr && *(token - 1) == PINKFISH_FIRST) {
                 if (!in_code) {
                     memcpy(result_ptr, chr, token - chr - 1);
                     result_ptr += (token - chr - 1);

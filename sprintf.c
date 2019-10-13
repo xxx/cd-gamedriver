@@ -162,9 +162,18 @@ typedef unsigned int format_info;
   if (in_add_char_ansi) {\
     if ((x) == ANSI_END) in_add_char_ansi = 0;\
     add_char_ansi_len++;\
+  } else if (in_add_char_pinkfish) {\
+    if ((x) == PINKFISH_SECOND && buff[bpos - 2] == PINKFISH_FIRST && buff[bpos - 3] != PINKFISH_FIRST) {\
+      in_add_char_pinkfish = 0;\
+    }\
+    add_char_ansi_len++;\
   } else if ((x) == ANSI_START) {\
     in_add_char_ansi = 1;\
     add_char_ansi_len++;\
+  } else if ((x) == PINKFISH_SECOND && ((bpos == 2 && buff[bpos - 2] == PINKFISH_FIRST) ||\
+            (bpos > 2 && buff[bpos - 2] == PINKFISH_FIRST && buff[bpos - 3] != PINKFISH_FIRST))) {\
+    in_add_char_pinkfish = 1;\
+    add_char_ansi_len += 2;\
   }\
 }
 #else
@@ -225,8 +234,10 @@ static int call_master_ob;	/* should the master object be called for the
 				 * name of an object? */
 
 #ifdef ANSI_COLOR
-static unsigned int in_add_char_ansi;  /* Track if we're in an ansi sequence or
-                                        * not, during ADD_CHARs */
+static _Bool in_add_char_ansi;  /* Track if we're in an ansi sequence or
+                                 * not, during ADD_CHARs */
+static _Bool in_add_char_pinkfish;  /* Track if we're in a pinkfish code or
+                                     * not, during ADD_CHARs */
 static unsigned int add_char_ansi_len; /* current length of unprintables */
 #endif
 
@@ -817,6 +828,7 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 #ifdef ANSI_COLOR
     add_char_ansi_len = 0;
     in_add_char_ansi = 0;
+    in_add_char_pinkfish = 0;
 #endif
     csts = 0;
     for (fpos = 0 ;; fpos++)

@@ -235,8 +235,10 @@ write_socket(char *cp, struct object *ob)
 	(ip = ob->interactive) == NULL ||
 	ip->do_close)
     {
+        cp = substitute_pinkfish(cp, 1);
 	(void)fputs(cp, stderr);
 	(void)fflush(stderr);
+	free(cp);
 	return;
     }
 
@@ -249,8 +251,7 @@ write_socket(char *cp, struct object *ob)
 	add_message2(ip->snoop_by->ob, "%%%s", cp);
 
 #ifdef ANSI_COLOR
-    char *colored = substitute_pinkfish(cp, ob->interactive->color_enabled);
-    cp = colored;
+    cp = substitute_pinkfish(cp, ip->color_enabled);
 #endif
 
 #ifdef WORD_WRAP
@@ -447,7 +448,7 @@ write_socket(char *cp, struct object *ob)
     }
 
 #ifdef ANSI_COLOR
-    free(colored);
+    free(cp);
 #endif
 }
 

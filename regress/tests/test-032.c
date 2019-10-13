@@ -37,7 +37,28 @@ test_terminal_colour()
 }
 
 void
+test_sprintf()
+{
+    write(
+        sprintf(
+            "%-8s %-8s\n",
+            RED("xxx"),
+            ORANGE("yyy")
+        )
+    );
+
+    write(
+        sprintf(
+            "%-8s %-8s\n",
+            "%^RED%^xxx%^RESET%^",
+            "%^ORANGE%^yyy%^RESET%^"
+        )
+    );
+}
+
+void
 create()
 {
     test_terminal_colour();
+    test_sprintf();
 }
