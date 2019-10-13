@@ -116,9 +116,9 @@ substitute_pinkfish(const char *chr, _Bool strip_only)
     /*
      * "big enough". In almost all cases the pinkfish code
      * is longer than the actual sequence, and when it's not,
-     * 3-1 is the worst case.
+     * there's no 2-1 difference.
      */
-    char *result = (char *)xalloc(3*(strlen(chr) + 1));
+    char *result = (char *)xalloc(2*(strlen(chr) + 1));
 
     char *result_ptr = result;
     char *code_start;
