@@ -8,4 +8,4 @@ DESCRIPTION
 	If the parameter is 1, color is enabled. If 0, color is disabled.
 
 SEE ALSO
-	query_color_enabled
+	query_color_enabled, terminal_colour

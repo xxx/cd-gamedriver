@@ -14,7 +14,7 @@ void
 test_terminal_colour()
 {
     string str = "\n\n%^FG_130%^%^B_ORANGE%^%^BOLD%^%^UNDERLINE%^%^FLASH%^hello%^RESET%^\n";
-    string colored = terminal_colour(str, 0);
+    string colored = terminal_colour(str);
     write(colored + "\n");
     write(strlen(str) + " " + strlen_printable(str) + "\n");
     write(strlen(colored) + " " + strlen_printable(colored) + "\n");

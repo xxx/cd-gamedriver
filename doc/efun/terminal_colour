@@ -1,0 +1,87 @@
+NAME
+	terminal_colour - convert text codes into ANSI escape sequences
+
+SYNOPSIS
+	string terminal_colour(string str, int color_enabled = 1)
+
+	str is the string to be converted.
+	color_enabled is a flag on whether to convert the codes to ANSI escapes, or
+	    just strip them out of the string without replacement.
+
+DESCRIPTION
+    This function converts a string containing codes a.k.a. Pinkfish codes
+    to their equivalent ANSI escape sequence. Each code is surrounded by
+    a "%^".
+
+    Example:
+
+        %%^BLUE%%^Snow continues to fall%%^RESET%%^
+        becomes
+        %^BLUE%^Snow continues to fall%^RESET%^
+
+        If the color_enabled argument is set to false, the codes will be
+        stripped, but no ANSI sequences will replace them.
+
+        Add an additional '%' in front of any '%^' pair that you want to
+        actually print out, like '%%%^'
+
+    The following codes are supported:
+        Reset all current codes. Use this at the end of every string passed.:
+            RESET
+
+        Text colors:
+            BLACK
+            RED
+            GREEN
+            YELLOW
+            BLUE
+            MAGENTA
+            CYAN
+            WHITE
+            ORANGE
+
+        Additionally, numbered codes for unspecified colors can be used:
+            FG_0 - FG_255
+
+        Background colors:
+            B_BLACK
+            B_RED
+            B_GREEN
+            B_YELLOW
+            B_BLUE
+            B_MAGENTA
+            B_CYAN
+            B_WHITE
+            B_ORANGE
+
+        Additionally, numbered codes for unspecified colors can be used:
+            BG_0 - BG_255
+
+        Text styles:
+            BOLD
+            FLASH
+            ITALIC
+            REVERSE
+            UNDERLINE
+
+        Additionally, a few other codes are supported, but do nothing, to
+          ease in porting:
+            INITTERM
+            WINDOW
+            ENDTERM
+            STATUS
+
+NOTES
+    At time of writing, this function assumes 256 color support, if
+    there is any support at all.
+
+    This efun is only defined if ANSI_COLOR was defined at compile time.
+
+    Support for these codes are client-specific, and not all codes will
+    work with every client.
+
+SEE ALSO
+	set_color_enabled, query_color_enabled
+
+
+

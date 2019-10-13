@@ -8,4 +8,4 @@ DESCRIPTION
 	Return 1 if enabled, 0 if disabled
 
 SEE ALSO
-	set_color_enabled
+	set_color_enabled, terminal_colour
