@@ -95,7 +95,7 @@ add_executable(driver ${CSRC} ${ISRC} efun_table.h master.h)
 target_link_libraries(driver PkgConfig::deps crypt m)
 target_compile_options(
     driver
-    PRIVATE -pipe -O3 -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
+    PRIVATE -pipe -L/usr/local/include/ -L/usr/include -fgnu89-inline -Wall -Wformat=2
 )
 
 # non .c/.o files that are created in the build dir need to

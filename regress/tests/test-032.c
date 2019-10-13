@@ -54,6 +54,32 @@ test_sprintf()
             "%^ORANGE%^yyy%^RESET%^"
         )
     );
+
+    write(
+        sprintf(
+            "%|8sx%|8s\n",
+            RED("xxx"),
+            ORANGE("yyy")
+        )
+    );
+
+    write(
+        sprintf(
+            "%|8sx%|8s\n",
+            "%^RED%^xxx%^RESET%^",
+            "%^ORANGE%^yyy%^RESET%^"
+        )
+    );
+    string str = "the quick brown fox jumped over the lazy dog";
+    string colored = RED(str);
+    string colored2 = "%^RED%^"+ str + "%^RESET%^";
+    write(sprintf("%=10s %5s\n", str, "tacos"));
+    write(sprintf("%=10s %5s\n", colored, "tacos"));
+    write(sprintf("%=10s %5s\n", colored2, "tacos"));
+
+    write(sprintf("%#60.4s\n", implode(explode(str, " "), "\n")));
+    write(sprintf("%#60.4s\n", implode(explode(colored, " "), "\n")));
+    write(sprintf("%#60.4s\n", implode(explode(colored2, " "), "\n")));
 }
 
 void
