@@ -912,6 +912,13 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 		fpos++;
 		continue;
 	    }
+#ifdef ANSI_COLOR
+	    if (format_str[fpos+1] == PINKFISH_SECOND)
+	    {
+		ADD_CHAR('%');
+		continue;
+	    }
+#endif
 	    GET_NEXT_ARG;
 	    fs = 0;
 	    prec = 0;
