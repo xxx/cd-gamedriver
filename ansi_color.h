@@ -6,5 +6,6 @@
 
 int strlen_printable(char *str);
 char *strip_color(char *str);
+char *substitute_pinkfish(const char *chr, _Bool strip_only);
 
 #endif // ANSI_COLOR_H

@@ -5884,6 +5884,32 @@ f_query_color_enabled(int num_arg)
         i = current_object->interactive->color_enabled;
     push_number(i);
 }
+
+/* ARGSUSED */
+static void
+f_terminal_colour(int num_arg)
+{
+    struct svalue *arg = sp- num_arg + 1;
+    char *str;
+
+    if (arg[0].type == T_STRING)
+    {
+        str = substitute_pinkfish(arg[0].u.string, 0);
+
+        char *m_str = make_mstring(str);
+        free(str);
+
+        if (m_str) {
+            pop_stack();
+            push_mstring(m_str);
+        }
+    }
+    else
+    {
+        pop_n_elems(num_arg);
+        push_number(0);
+    }
+}
 #endif
 
 /* ARGSUSED */

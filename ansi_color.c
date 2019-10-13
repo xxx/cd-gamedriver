@@ -6,6 +6,8 @@
 #include <string.h>
 #include "ansi_color.h"
 #include "config.h"
+#include "memory.h"
+#include "pinkfish_codes.h"
 #ifdef USE_UTF8
 #include <glib.h>
 #endif
@@ -93,4 +95,79 @@ strip_color(char *chr)
     }
 
     return chr;
+}
+
+/*
+ * Substitute pinkfish codes in a string with the actual escape sequences.
+ * pinkfish_lookup is handled by a perfect minimal hash function generated
+ * by gperf. New codes should be added to the relevant .gperf file, and then
+ * the header regenerated.
+ *
+ * The caller needs to free() the result of this function.
+ *
+ * if strip_only is true, we only remove the pinkfish codes from the
+ * input, without replacing them with anything.
+ */
+char *
+substitute_pinkfish(const char *chr, _Bool strip_only)
+{
+    const char *const delim = "%^";
+
+    /*
+     * "big enough". In almost all cases the pinkfish code
+     * is longer than the actual sequence, and when it's not,
+     * there's no 2-1 difference.
+     */
+    char *result = (char *)xalloc(2*(strlen(chr) + 1));
+
+    char *result_ptr = result;
+    char *code_start;
+    int in_code = 0;
+
+    char *token;
+    while((token = strstr(chr, delim))) {
+
+        // handle escaped %s
+        if (token > chr && *(token - 1) == '%') {
+                if (!in_code) {
+                    memcpy(result_ptr, chr, token - chr - 1);
+                    result_ptr += (token - chr - 1);
+                    memcpy(result_ptr, delim, 2);
+                    result_ptr += 2;
+                }
+                // else it will be considered part of the code, and
+                // so almost certainly a mistake
+        } else if (!in_code) {
+            in_code = 1;
+            code_start = token + 2;
+
+            memcpy(result_ptr, chr, token - chr);
+            result_ptr += (token - chr);
+        } else {
+            in_code = 0;
+
+            if (!strip_only) {
+                const struct pinkfish_code *code;
+
+                code = pinkfish_lookup(code_start, token - code_start);
+
+                if (code) {
+                    size_t len = strlen(code->ansi);
+                    memcpy(result_ptr, code->ansi, len);
+                    result_ptr += len;
+                }
+            }
+
+            // else remove unknown tokens in the output.
+        }
+
+        chr = token + 2;
+    }
+
+    // copy any remaining bytes + nul. unfinished tokens will have the
+    // unfinished portion copied in.
+    size_t len = strlen(chr);
+    strncpy(result_ptr, chr, len + 1);
+
+    return result;
 }
