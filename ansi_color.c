@@ -127,7 +127,7 @@ substitute_pinkfish(const char *chr, _Bool strip_only)
     char *token;
     while((token = strstr(chr, delim))) {
 
-        // handle escaped %s
+        // handle escaped %'s, and turn %%^ into %^
         if (token > chr && *(token - 1) == '%') {
                 if (!in_code) {
                     memcpy(result_ptr, chr, token - chr - 1);
