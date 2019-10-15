@@ -223,8 +223,9 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
     size_t len = strlen(chr);
     memcpy(result_ptr, chr, len);
     result_ptr += len;
-    // force a reset at the end. len == 5 to handle the nul.
-    strncpy(result_ptr, ANSI_RESET, 5);
+
+    memcpy(result_ptr, ANSI_RESET, 4);
+    *(result_ptr + 4) = '\0';
 
     return result;
 }
