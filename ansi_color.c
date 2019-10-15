@@ -224,6 +224,7 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
     memcpy(result_ptr, chr, len);
     result_ptr += len;
 
+    // Force a reset to avoid pollution.
     memcpy(result_ptr, ANSI_RESET, 4);
     *(result_ptr + 4) = '\0';
 
