@@ -221,7 +221,7 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
     // copy any remaining bytes. unfinished tokens will have the
     // unfinished portion copied in.
     size_t len = strlen(chr);
-    strncpy(result_ptr, chr, len);
+    memcpy(result_ptr, chr, len);
     result_ptr += len;
     // force a reset at the end. len == 5 to handle the nul.
     strncpy(result_ptr, ANSI_RESET, 5);
