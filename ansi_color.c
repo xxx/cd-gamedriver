@@ -146,8 +146,9 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
      * "big enough". In almost all cases the pinkfish code
      * is longer than the actual sequence, and when it's not,
      * there's no 2-1 difference.
+     * Add an additional 4 bytes for ANSI_RESET
      */
-    char *result = (char *)xalloc(2*(strlen(chr) + 1));
+    char *result = (char *)xalloc(2*(strlen(chr) + 1) + 4);
 
     char *result_ptr = result;
     char *code_start;
@@ -217,10 +218,13 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
         chr = token + 2;
     }
 
-    // copy any remaining bytes + nul. unfinished tokens will have the
+    // copy any remaining bytes. unfinished tokens will have the
     // unfinished portion copied in.
     size_t len = strlen(chr);
-    strncpy(result_ptr, chr, len + 1);
+    strncpy(result_ptr, chr, len);
+    result_ptr += len;
+    // force a reset at the end. len == 5 to handle the nul.
+    strncpy(result_ptr, ANSI_RESET, 5);
 
     return result;
 }

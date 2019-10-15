@@ -3,6 +3,7 @@
 
 #define ANSI_START 27
 #define ANSI_END 'm'
+#define ANSI_RESET "\033[0m"
 
 #define PINKFISH_DELIMITER "%^"
 #define PINKFISH_FIRST '%'
