@@ -11,6 +11,6 @@
 
 int strlen_printable(char *str);
 char *strip_color(char *str);
-char *substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *inter);
+char *substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter);
 
 #endif // ANSI_COLOR_H

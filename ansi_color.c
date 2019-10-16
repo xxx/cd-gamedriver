@@ -138,9 +138,11 @@ strip_color(char *chr)
  * just be removed as any other unknown token would be.
  */
 char *
-substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *inter)
+substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
 {
-    const char *const delim = PINKFISH_DELIMITER;
+    if (!strstr(chr, PINKFISH_DELIMITER)) {
+        return chr;
+    }
 
     /*
      * "big enough". In almost all cases the pinkfish code
@@ -155,13 +157,13 @@ substitute_pinkfish(const char *chr, _Bool color_enabled, struct interactive *in
     int in_code = 0;
 
     char *token;
-    while((token = strstr(chr, delim))) {
+    while((token = strstr(chr, PINKFISH_DELIMITER))) {
         // handle escaped %'s, and turn %%^ into %^
         if (token > chr && *(token - 1) == PINKFISH_FIRST) {
                 if (!in_code) {
                     memcpy(result_ptr, chr, token - chr - 1);
                     result_ptr += (token - chr - 1);
-                    memcpy(result_ptr, delim, 2);
+                    memcpy(result_ptr, PINKFISH_DELIMITER, 2);
                     result_ptr += 2;
                 }
                 // else it will be considered part of the code, and
