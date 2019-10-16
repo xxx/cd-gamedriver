@@ -5964,7 +5964,8 @@ f_terminal_colour(int num_arg)
         }
 
         char *m_str = make_mstring(str);
-        free(str);
+        if (str != (sp-1)->u.string)
+            free(str);
 
         if (m_str) {
             pop_n_elems(num_arg);
