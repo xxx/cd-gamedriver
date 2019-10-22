@@ -11,7 +11,7 @@
 
 /*
  * Check if we've covered a Pinkfish sequence need to act. Sequences can be
- * escaped with a '#' or '\' in front of the opening '%'
+ * escaped by doubling the characters, like %%^^
  * chr - pointer to start of string
  * off - current offset into the string
  */
