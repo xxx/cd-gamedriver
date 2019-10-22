@@ -2082,10 +2082,7 @@ break_string(char *str, int width, struct svalue *indent)
         } else if (in_ansi && fstr[il] == ANSI_END) {
             ansi_len++;
             in_ansi = 0;
-        } else if (!in_pinkfish && (
-            (il == 1 && fstr[il] == PINKFISH_SECOND && fstr[il-1] == PINKFISH_FIRST) ||
-            (il > 1 && fstr[il] == PINKFISH_SECOND && fstr[il-1] == PINKFISH_FIRST &&
-                fstr[il-2] != PINKFISH_FIRST))) {
+        } else if (!in_pinkfish && END_OF_PINKFISH_SEQUENCE(fstr, il)) {
             in_pinkfish = 1;
             ansi_len++; // count the '%'
         } else if (in_pinkfish && fstr[il] == PINKFISH_SECOND &&

@@ -163,15 +163,14 @@ typedef unsigned int format_info;
     if ((x) == ANSI_END) in_add_char_ansi = 0;\
     add_char_ansi_len++;\
   } else if (in_add_char_pinkfish) {\
-    if ((x) == PINKFISH_SECOND && buff[bpos - 2] == PINKFISH_FIRST && buff[bpos - 3] != PINKFISH_FIRST) {\
+    if ((x) == PINKFISH_SECOND && buff[bpos - 2] == PINKFISH_FIRST) {\
       in_add_char_pinkfish = 0;\
     }\
     add_char_ansi_len++;\
   } else if ((x) == ANSI_START) {\
     in_add_char_ansi = 1;\
     add_char_ansi_len++;\
-  } else if ((x) == PINKFISH_SECOND && ((bpos == 2 && buff[bpos - 2] == PINKFISH_FIRST) ||\
-            (bpos > 2 && buff[bpos - 2] == PINKFISH_FIRST && buff[bpos - 3] != PINKFISH_FIRST))) {\
+   } else if (END_OF_PINKFISH_SEQUENCE(buff, (bpos - 1))) {\
     in_add_char_pinkfish = 1;\
     add_char_ansi_len += 2;\
   }\
@@ -577,19 +576,15 @@ add_column(cst **column, short int trailing)
             ansi_len++; // We skip sequence characters.
         } else if (in_pinkfish) {
             if ((*column)->d.col[done] == PINKFISH_SECOND &&
-                (*column)->d.col[done - 1] == PINKFISH_FIRST &&
-                (*column)->d.col[done - 2] != PINKFISH_FIRST) {
+                (*column)->d.col[done - 1] == PINKFISH_FIRST) {
                 in_pinkfish = 0;
             }
+
             ansi_len++;
         } else if (((*column)->d.col)[done] == ANSI_START) {
             in_ansi = 1;
             ansi_len++;
-        } else if ((done == 1 && (*column)->d.col[done] == PINKFISH_SECOND &&
-                    (*column)->d.col[done - 1] == PINKFISH_FIRST) ||
-                   (done > 1 && (*column)->d.col[done] == PINKFISH_SECOND &&
-                    (*column)->d.col[done - 1] == PINKFISH_FIRST &&
-                    (*column)->d.col[done - 2] != PINKFISH_FIRST)) {
+        } else if (END_OF_PINKFISH_SEQUENCE((*column)->d.col, done)) {
             in_pinkfish = 1;
             ansi_len += 2;
         }
@@ -1152,17 +1147,11 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
                                     in_ansi = 0;
                                 } else if (in_pinkfish &&
 				    input_copy[i] == PINKFISH_SECOND &&
-				    input_copy[i - 1] == PINKFISH_FIRST &&
-				    input_copy[i - 2] != PINKFISH_FIRST) {
+				    input_copy[i - 1] == PINKFISH_FIRST) {
                                     in_pinkfish = 0;
                                 } else if (input_copy[i] == ANSI_START && !in_pinkfish) {
                                     in_ansi = 1;
-                                } else if ((i == 1 &&
-				    input_copy[i] == PINKFISH_SECOND &&
-				    input_copy[i - 1] == PINKFISH_FIRST) ||
-                                    (i > 1 && input_copy[i] == PINKFISH_SECOND &&
-                                    input_copy[i - 1] == PINKFISH_FIRST &&
-                                    input_copy[i - 2] != PINKFISH_FIRST)) {
+                                } else if (END_OF_PINKFISH_SEQUENCE(input_copy, i)) {
                                     in_pinkfish = 1;
                                     len--;
 				} else {

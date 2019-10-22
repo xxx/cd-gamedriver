@@ -11,19 +11,18 @@ SYNOPSIS
 DESCRIPTION
     This function converts a string containing codes a.k.a. Pinkfish codes
     to their equivalent ANSI escape sequence. Each code is surrounded by
-    a "%^".
+    a "%%^^".
 
     Example:
 
-        %%^BLUE%%^Snow continues to fall%%^RESET%%^
+        %%^^BLUE%%^^Snow continues to fall%%^^RESET%%^^
         becomes
         %^BLUE%^Snow continues to fall%^RESET%^
 
         If the color_enabled argument is set to false, the codes will be
         stripped, but no ANSI sequences will replace them.
 
-        Add an additional '%' in front of any '%^' pair that you want to
-        actually print out, like '%%%^'
+        Use doubled characters to do an escape, like %%%^^^.
 
     The following codes are supported:
         Reset all current codes. Use this at the end of every string passed.:

@@ -9,6 +9,17 @@
 #define PINKFISH_FIRST '%'
 #define PINKFISH_SECOND '^'
 
+/*
+ * Check if we've covered a Pinkfish sequence need to act. Sequences can be
+ * escaped with a '#' or '\' in front of the opening '%'
+ * chr - pointer to start of string
+ * off - current offset into the string
+ */
+#define END_OF_PINKFISH_SEQUENCE(chr, off) \
+    (((off) == 1 && *((chr) + (off)) == PINKFISH_SECOND && *chr == PINKFISH_FIRST) || \
+    ((off) > 1 && *((chr) + (off)) == PINKFISH_SECOND && *((chr) + (off) - 1) == PINKFISH_FIRST && \
+        (*((chr) + (off) - 2) != PINKFISH_FIRST || *((chr) + (off) + 1) != PINKFISH_SECOND)))
+
 int strlen_printable(char *str);
 char *strip_color(char *str);
 char *substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter);

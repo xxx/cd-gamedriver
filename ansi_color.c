@@ -21,8 +21,10 @@
  * away with checking the first byte only.
  */
 #define NEXT_CHAR(chr) g_utf8_next_char(chr)
+#define PREV_CHAR(chr) g_utf8_prev_char(chr)
 #else
 #define NEXT_CHAR(chr) ((chr) + 1)
+#define PREV_CHAR(chr) ((chr) - 1)
 #endif
 
 int
@@ -50,7 +52,7 @@ strlen_printable(char *chr)
             if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND) {
                 // We skip both chars at once here
 
-                // only subject len + 1 because i was
+                // only subtract len + 1 because i was
                 // never incremented for '^'.
                 i -= ansi_len + 1;
                 ansi_len = 0;
@@ -62,7 +64,9 @@ strlen_printable(char *chr)
         } else if ((*chr) == ANSI_START) {
             in_ansi = 1;
             ansi_len++;
-        } else if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND) {
+        } else if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND &&
+            (i <= 1 || (*PREV_CHAR(chr)) != PINKFISH_FIRST ||
+                (*NEXT_CHAR(NEXT_CHAR(chr)) != PINKFISH_SECOND))) {
             // We skip both chars at once here
             in_pinkfish = 1;
             ansi_len += 2;
@@ -158,8 +162,9 @@ substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
 
     char *token;
     while((token = strstr(chr, PINKFISH_DELIMITER))) {
-        // handle escaped %'s, and turn %%^ into %^
-        if (token > chr && *(token - 1) == PINKFISH_FIRST) {
+        // handle escape sequences, and turn %%^^ into %^
+        if (token > chr && *(token - 1) == PINKFISH_FIRST &&
+                           *(token + 2) == PINKFISH_SECOND) {
                 if (!in_code) {
                     memcpy(result_ptr, chr, token - chr - 1);
                     result_ptr += (token - chr - 1);
@@ -218,6 +223,9 @@ substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
         }
 
         chr = token + 2;
+        if (*chr == PINKFISH_SECOND) {
+            chr++;
+        }
     }
 
     // copy any remaining bytes. unfinished tokens will have the
