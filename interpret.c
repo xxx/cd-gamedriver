@@ -7172,6 +7172,52 @@ f_match_path(int num_arg)
     assign_svalue(sp, svp1);
 }
 
+#ifdef HASH_STRING_EFUN
+/* ARGSUSED */
+static void
+f_hash_string(int num_arg)
+{
+    if ((sp-1)->type == T_NUMBER) {
+        pop_n_elems(2);
+        push_number(0);
+        return;
+    }
+
+    GChecksumType checksum_type = G_CHECKSUM_MD5;
+
+    switch(sp->u.number) {
+    case 0:
+        break;
+    case 1:
+        checksum_type = G_CHECKSUM_SHA1;
+        break;
+    case 2:
+        checksum_type = G_CHECKSUM_SHA256;
+        break;
+    case 3:
+        checksum_type = G_CHECKSUM_SHA384;
+        break;
+    case 4:
+        checksum_type = G_CHECKSUM_SHA512;
+        break;
+    default:
+        error("Bad hash_type passed to hash_string: %lld\n"
+              "Pass 0 for MD5, 1 for SHA1, 2 for SHA256, "
+              "3 for SHA384, and 4 for SHA512\n",
+              sp->u.number);
+    }
+
+    gchar *hash = g_compute_checksum_for_string(
+        checksum_type, (sp-1)->u.string, -1
+    );
+
+    char *mstr = make_mstring((const char *)hash);
+    g_free(hash);
+
+    pop_n_elems(2);
+    push_mstring(mstr);
+}
+#endif
 
 #define EFUN_TABLE
 #include "efun_table.h"

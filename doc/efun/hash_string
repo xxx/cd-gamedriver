@@ -1,0 +1,25 @@
+NAME
+	hash_string - Get a hexadecimal hash digest of a string
+
+SYNOPSIS
+	string hash_string(string str, int algorithm)
+
+DESCRIPTION
+	This function takes 'str' as input, and hashes it to a hexadecimal
+	string with 'algorithm', which is defined as follows:
+
+	    0  -  MD5
+	    1  -  SHA1
+	    2  -  SHA256
+	    3  -  SHA384
+	    4  -  SHA512
+
+EXAMPLES
+        hash_string("foobar", 1)
+            returns "8843d7f92416211de9ebb963ff4ce28125932878"
+
+NOTES
+        It's probably best to not use these for anything requiring real
+        security. They are better than the classic LPC crypt() function,
+        but are still pretty easily brute-forced on modern hardware, or
+        will be sooner than later.

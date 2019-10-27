@@ -382,5 +382,13 @@
  */
 #define USE_UTF8
 
+/*
+ * HASH_STRING_EFUN
+ *
+ * Defines an efun, hash_string(), which allows to get various hexadecimal
+ * hashes of a passed string (MD5, SHA1, SHA256, etc.). Requires GLib.
+ */
+#define HASH_STRING_EFUN
+
 #endif
 

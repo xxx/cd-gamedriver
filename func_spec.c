@@ -100,11 +100,6 @@ int	object_time(object default: F_THIS_OBJECT);
 int	objectp(mixed);
 void	obsolete(string);
 function papplyv(function, mixed *);
-#ifdef HAVE_PCRE
-int     pcre_matches(int|string, string);
-string *pcre_filter(string *, string);
-string *pcre_capture(int|string, string);
-#endif
 int	pointerp(mixed);
 float	pow(float, float);
 object	present(int|object|string, object *|object default: F_THIS_OBJECT);
@@ -154,15 +149,6 @@ float	sqrt(float);
 mixed   str2val(string);
 int	stringp(mixed);
 int	strlen(int|string);
-#ifdef ANSI_COLOR
-int	strlen_printable(int|string);
-int	strip_color(int|string);
-int     set_color_enabled(int);
-int     query_color_enabled();
-int     set_theme(int, int, int, int, int);
-int     *query_theme();
-string  terminal_colour(string, int default: F_CONST1);
-#endif
 void	tail(string);
 float	tan(float);
 float	tanh(float);
@@ -191,3 +177,23 @@ string  val2json(mixed);
 void set_screen_width(int);
 int query_screen_width();
 #endif /* WORD_WRAP */
+
+#ifdef ANSI_COLOR
+int	strlen_printable(int|string);
+int	strip_color(int|string);
+int     set_color_enabled(int);
+int     query_color_enabled();
+int     set_theme(int, int, int, int, int);
+int     *query_theme();
+string  terminal_colour(string, int default: F_CONST1);
+#endif
+
+#ifdef HAVE_PCRE
+int     pcre_matches(int|string, string);
+string *pcre_filter(string *, string);
+string *pcre_capture(int|string, string);
+#endif
+
+#ifdef HASH_STRING_EFUN
+string hash_string(int|string, int);
+#endif
