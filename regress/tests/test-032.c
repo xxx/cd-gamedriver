@@ -87,8 +87,17 @@ test_sprintf()
 }
 
 void
+test_escapes()
+{
+    write("%^RED%^^test%^RESET%^\n");
+    write(strlen("%^RED%^^test%^RESET%^") + "\n");
+    write(strlen_printable("%^RED%^^test%^RESET%^") + "\n");
+}
+
+void
 create()
 {
     test_terminal_colour();
     test_sprintf();
+    test_escapes();
 }

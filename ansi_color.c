@@ -159,9 +159,12 @@ substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
     char *result_ptr = result;
     char *code_start;
     int in_code = 0;
+    _Bool escaping;
 
     char *token;
     while((token = strstr(chr, PINKFISH_DELIMITER))) {
+        escaping = 0;
+
         // handle escape sequences, and turn %%^^ into %^
         if (token > chr && *(token - 1) == PINKFISH_FIRST &&
                            *(token + 2) == PINKFISH_SECOND) {
@@ -170,6 +173,7 @@ substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
                     result_ptr += (token - chr - 1);
                     memcpy(result_ptr, PINKFISH_DELIMITER, 2);
                     result_ptr += 2;
+                    escaping = 1;
                 }
                 // else it will be considered part of the code, and
                 // so almost certainly a mistake
@@ -223,7 +227,7 @@ substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter)
         }
 
         chr = token + 2;
-        if (*chr == PINKFISH_SECOND) {
+        if (escaping && *chr == PINKFISH_SECOND) {
             chr++;
         }
     }
