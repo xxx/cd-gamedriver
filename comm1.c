@@ -224,8 +224,9 @@ write_socket(char *cp, struct object *ob)
 #endif
 #ifdef ANSI_COLOR
     int ansi_len = 0;
-    _Bool free_cp = 0, in_ansi = 0;
+    _Bool in_ansi = 0;
     char *original_cp = cp;
+    char *cp_start = 0;
 #endif
 #ifdef USE_UTF8
     // the len declared above is still the number of bytes.
@@ -239,16 +240,13 @@ write_socket(char *cp, struct object *ob)
     {
 #ifdef ANSI_COLOR
         cp = substitute_pinkfish(cp, 1, NULL);
-        if(cp != original_cp) {
-            free_cp = 1;
-        }
 #endif
 	(void)fputs(cp, stderr);
 	(void)fflush(stderr);
 #ifdef ANSI_COLOR
-	if (free_cp && *cp) {
+        if(cp != original_cp && cp) {
             free(cp);
-	}
+        }
 #endif
 	return;
     }
@@ -264,7 +262,7 @@ write_socket(char *cp, struct object *ob)
 #ifdef ANSI_COLOR
     cp = substitute_pinkfish(cp, ip->color_enabled, ip);
     if(cp != original_cp) {
-        free_cp = 1;
+        cp_start = cp; // stash this to free later
     }
 #endif
 
@@ -462,8 +460,8 @@ write_socket(char *cp, struct object *ob)
     }
 
 #ifdef ANSI_COLOR
-    if (free_cp && *cp)
-        free(cp);
+    if (cp_start)
+        free(cp_start);
 #endif
 }
 
