@@ -21,7 +21,6 @@
         (*((chr) + (off) - 2) != PINKFISH_FIRST || *((chr) + (off) + 1) != PINKFISH_SECOND)))
 
 int strlen_printable(char *str);
-char *strip_color(char *str);
 char *substitute_pinkfish(char *chr, _Bool color_enabled, struct interactive *inter);
 
 #endif // ANSI_COLOR_H

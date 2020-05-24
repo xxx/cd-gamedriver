@@ -159,18 +159,12 @@ typedef unsigned int format_info;
   buff[bpos++] = x;\
   if (bpos > BUFF_SIZE) ERROR(ERR_BUFF_OVERFLOW); \
   curpos++;\
-  if (in_add_char_ansi) {\
-    if ((x) == ANSI_END) in_add_char_ansi = 0;\
-    add_char_ansi_len++;\
-  } else if (in_add_char_pinkfish) {\
+  if (in_add_char_pinkfish) {\
     if ((x) == PINKFISH_SECOND && buff[bpos - 2] == PINKFISH_FIRST) {\
       in_add_char_pinkfish = 0;\
     }\
     add_char_ansi_len++;\
-  } else if ((x) == ANSI_START) {\
-    in_add_char_ansi = 1;\
-    add_char_ansi_len++;\
-   } else if (END_OF_PINKFISH_SEQUENCE(buff, (bpos - 1))) {\
+  } else if (END_OF_PINKFISH_SEQUENCE(buff, (bpos - 1))) {\
     in_add_char_pinkfish = 1;\
     add_char_ansi_len += 2;\
   }\
@@ -233,8 +227,6 @@ static int call_master_ob;	/* should the master object be called for the
 				 * name of an object? */
 
 #ifdef ANSI_COLOR
-static _Bool in_add_char_ansi;  /* Track if we're in an ansi sequence or
-                                 * not, during ADD_CHARs */
 static _Bool in_add_char_pinkfish;  /* Track if we're in a pinkfish code or
                                      * not, during ADD_CHARs */
 static unsigned int add_char_ansi_len; /* current length of unprintables */
@@ -557,7 +549,6 @@ add_column(cst **column, short int trailing)
     register unsigned int done;
     unsigned int save;
 #ifdef ANSI_COLOR
-    _Bool in_ansi = 0;
     _Bool in_pinkfish = 0;
     int ansi_len = 0;
 #endif
@@ -568,21 +559,12 @@ add_column(cst **column, short int trailing)
          ((*column)->d.col)[done] &&
          (((*column)->d.col)[done] != '\n');
          done++) {
-        if (in_ansi) {
-            if (((*column)->d.col)[done] == ANSI_END) {
-                in_ansi = 0;
-            }
-
-            ansi_len++; // We skip sequence characters.
-        } else if (in_pinkfish) {
+        if (in_pinkfish) {
             if ((*column)->d.col[done] == PINKFISH_SECOND &&
                 (*column)->d.col[done - 1] == PINKFISH_FIRST) {
                 in_pinkfish = 0;
             }
 
-            ansi_len++;
-        } else if (((*column)->d.col)[done] == ANSI_START) {
-            in_ansi = 1;
             ansi_len++;
         } else if (END_OF_PINKFISH_SEQUENCE((*column)->d.col, done)) {
             in_pinkfish = 1;
@@ -834,7 +816,6 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
     curpos = 0;
 #ifdef ANSI_COLOR
     add_char_ansi_len = 0;
-    in_add_char_ansi = 0;
     in_add_char_pinkfish = 0;
 #endif
     csts = 0;
@@ -1128,7 +1109,6 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 			    max = len = 0;
 			    n = 1;
 #ifdef ANSI_COLOR
-			    _Bool in_ansi = 0;
 			    _Bool in_pinkfish = 0;
 #endif
 			    for (i = 0; input_copy[i]; i++)
@@ -1143,14 +1123,10 @@ string_print_formatted(int call_master, char *format_input, int argc, struct sva
 				    continue;
 				}
 #ifdef ANSI_COLOR
-				if (in_ansi && input_copy[i] == ANSI_END) {
-                                    in_ansi = 0;
-                                } else if (in_pinkfish &&
+				if (in_pinkfish &&
 				    input_copy[i] == PINKFISH_SECOND &&
 				    input_copy[i - 1] == PINKFISH_FIRST) {
                                     in_pinkfish = 0;
-                                } else if (input_copy[i] == ANSI_START && !in_pinkfish) {
-                                    in_ansi = 1;
                                 } else if (END_OF_PINKFISH_SEQUENCE(input_copy, i)) {
                                     in_pinkfish = 1;
                                     len--;

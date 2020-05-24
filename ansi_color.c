@@ -32,23 +32,12 @@ strlen_printable(char *chr)
 {
     int ansi_len = 0;
     int i = 0;
-    _Bool in_ansi = 0;
     _Bool in_pinkfish = 0;
 
     while (*chr) {
         i++;
 
-        if (in_ansi) {
-            /* end of sequence */
-            if ((*chr) == ANSI_END) {
-                /* subtract the length of just-finished sequence */
-                i -= ansi_len + 1;
-                ansi_len = 0;
-                in_ansi = 0;
-            } else {
-                ansi_len++;
-            }
-        } else if (in_pinkfish) {
+        if (in_pinkfish) {
             if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND) {
                 // We skip both chars at once here
 
@@ -61,9 +50,6 @@ strlen_printable(char *chr)
             } else {
                 ansi_len++;
             }
-        } else if ((*chr) == ANSI_START) {
-            in_ansi = 1;
-            ansi_len++;
         } else if ((*chr) == PINKFISH_FIRST && (*NEXT_CHAR(chr)) == PINKFISH_SECOND &&
             (i <= 1 || (*PREV_CHAR(chr)) != PINKFISH_FIRST ||
                 (*NEXT_CHAR(NEXT_CHAR(chr)) != PINKFISH_SECOND))) {
@@ -82,47 +68,6 @@ strlen_printable(char *chr)
     }
 
     return i;
-}
-
-char *
-strip_color(char *chr)
-{
-    char *sequence_start = 0;
-    char *d, *s;
-    d = s = chr;
-
-    while(*d) {
-        if (!sequence_start && *d == ANSI_START) {
-            sequence_start = d;
-        }
-
-        while (sequence_start && *d) {
-            if (*d == ANSI_END) {
-                sequence_start = 0;
-            }
-            ++d;
-        }
-
-        // handle multiple sequences in succession
-        if(!sequence_start && *d == ANSI_START) {
-            continue;
-        }
-
-        if (*d) {
-            *s++ = *d++;
-        }
-    }
-
-    // Handle the case where we get to the end, but
-    // are in the middle of a sequence. We treat
-    // the unfinished sequence as normal text.
-    if (sequence_start) {
-        memmove(s, sequence_start, (d - s + 1));
-    } else {
-        *s = '\0';
-    }
-
-    return chr;
 }
 
 /*

@@ -5846,19 +5846,6 @@ f_strlen_printable(int xxx)
     push_number(i);
 }
 
-static void
-f_strip_color(int xxx)
-{
-    char *str;
-
-    if (sp->type == T_NUMBER)
-        return;
-    str = make_mstring(sp->u.string);
-    strip_color(str);
-    pop_stack();
-    push_mstring(str);
-}
-
 /* ARGSUSED */
 static void
 f_set_color_enabled(int num_arg)

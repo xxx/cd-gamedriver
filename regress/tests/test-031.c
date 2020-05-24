@@ -35,7 +35,6 @@ test_break_string()
     write(break_string("yyyy yyx x xxxx zz zzz z", 6) + "\n");
     write(break_string("😈😈 😈😈 😈😈 😈😈 😈😈", 6) + "\n");
     write(break_string(BLUE("😈😈 😈😈 😈😈 😈😈 😈😈"), 6) + "\n");
-//    write(strip_color(BLUE("😈😈 😈😈 😈😈 😈😈 😈😈")) + "\n");
     write(break_string("😈 😈 😈 😈 😈 😈 😈 😈 😈 😈", 5) + "\n");
     write(break_string("😈 😈 😈 😈 😈 😈 😈 😈 😈 😈", 10) + "\n");
     write(break_string("xx xx xx xx xx xx xx xx xx xx", 10) + "\n");

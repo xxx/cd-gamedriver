@@ -15,5 +15,5 @@ DESCRIPTION
 	characters, rather than number of bytes.
 
 SEE ALSO
-    strip_color
+    terminal_colour
 
