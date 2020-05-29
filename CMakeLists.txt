@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-project (cd-gamedriver)
+project (cd-gamedriver LANGUAGES C)
 
 # Set these to whatever is correct for you.
 set(MUD_LIB /edge/sanitys_edge/mud/lib)
